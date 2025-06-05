@@ -1,15 +1,21 @@
-﻿CREATE DATABASE LMS_System;
+﻿-- 1. Tạo CSDL và sử dụng
+CREATE DATABASE LMS_System;
 GO
 USE LMS_System;
 GO
 
+-- 2. Bảng users (thêm email và avatar_url, email cho phép NULL để không lỗi khi thêm cột nếu bảng có dữ liệu)
 CREATE TABLE users (
     user_id INT PRIMARY KEY IDENTITY,
     username NVARCHAR(50) UNIQUE NOT NULL,
     password NVARCHAR(255) NOT NULL,
-    role NVARCHAR(20) CHECK (role IN ('admin', 'student', 'lecturer')) NOT NULL
+    role NVARCHAR(20) CHECK (role IN ('admin', 'student', 'lecturer')) NOT NULL,
+    email NVARCHAR(100) NULL,
+    avatar_url NVARCHAR(255) NULL
 );
+GO
 
+-- 3. Bảng admins (thêm avatar_url)
 CREATE TABLE admins (
     admin_id INT PRIMARY KEY IDENTITY,
     user_id INT UNIQUE,
@@ -19,32 +25,41 @@ CREATE TABLE admins (
     avatar_url NVARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
+-- 4. Bảng students (thêm avatar_url)
 CREATE TABLE students (
     student_id INT PRIMARY KEY IDENTITY,
     user_id INT UNIQUE,
     full_name NVARCHAR(100),
     student_code NVARCHAR(20) UNIQUE,
     email NVARCHAR(100),
+    avatar_url NVARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
+-- 5. Bảng lecturers (thêm avatar_url)
 CREATE TABLE lecturers (
     lecturer_id INT PRIMARY KEY IDENTITY,
     user_id INT UNIQUE,
     full_name NVARCHAR(100),
     email NVARCHAR(100),
+    avatar_url NVARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
--- 2. SEMESTERS & COURSES
+-- 6. Bảng semesters
 CREATE TABLE semesters (
     semester_id INT PRIMARY KEY IDENTITY,
     name NVARCHAR(50),
     start_date DATE,
     end_date DATE
 );
+GO
 
+-- 7. Bảng courses
 CREATE TABLE courses (
     course_id INT PRIMARY KEY IDENTITY,
     name NVARCHAR(100),
@@ -56,7 +71,9 @@ CREATE TABLE courses (
     FOREIGN KEY (lecturer_id) REFERENCES lecturers(lecturer_id),
     FOREIGN KEY (semester_id) REFERENCES semesters(semester_id)
 );
+GO
 
+-- 8. Bảng enrollments
 CREATE TABLE enrollments (
     enrollment_id INT PRIMARY KEY IDENTITY,
     student_id INT,
@@ -66,8 +83,9 @@ CREATE TABLE enrollments (
     FOREIGN KEY (student_id) REFERENCES students(student_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+GO
 
--- 3. TEACHING MATERIALS & ASSIGNMENTS
+-- 9. Bảng assignments
 CREATE TABLE assignments (
     assignment_id INT PRIMARY KEY IDENTITY,
     course_id INT,
@@ -77,7 +95,9 @@ CREATE TABLE assignments (
     type NVARCHAR(20) CHECK (type IN ('exercise', 'exam')),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+GO
 
+-- 10. Bảng submissions
 CREATE TABLE submissions (
     submission_id INT PRIMARY KEY IDENTITY,
     assignment_id INT,
@@ -87,7 +107,9 @@ CREATE TABLE submissions (
     FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id),
     FOREIGN KEY (student_id) REFERENCES students(student_id)
 );
+GO
 
+-- 11. Bảng grades
 CREATE TABLE grades (
     grade_id INT PRIMARY KEY IDENTITY,
     student_id INT,
@@ -99,7 +121,9 @@ CREATE TABLE grades (
     FOREIGN KEY (course_id) REFERENCES courses(course_id),
     FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
 );
+GO
 
+-- 12. Bảng course_materials
 CREATE TABLE course_materials (
     material_id INT PRIMARY KEY IDENTITY,
     course_id INT,
@@ -109,8 +133,9 @@ CREATE TABLE course_materials (
     uploaded_at DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+GO
 
--- 4. ATTENDANCE
+-- 13. Bảng attendance
 CREATE TABLE attendance (
     attendance_id INT PRIMARY KEY IDENTITY,
     student_id INT,
@@ -121,8 +146,9 @@ CREATE TABLE attendance (
     FOREIGN KEY (student_id) REFERENCES students(student_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+GO
 
--- 5. ANNOUNCEMENTS & COMMUNICATION
+-- 14. Bảng announcements
 CREATE TABLE announcements (
     announcement_id INT PRIMARY KEY IDENTITY,
     user_id INT,
@@ -131,7 +157,9 @@ CREATE TABLE announcements (
     created_at DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
+-- 15. Bảng messages
 CREATE TABLE messages (
     message_id INT PRIMARY KEY IDENTITY,
     sender_id INT,
@@ -141,7 +169,9 @@ CREATE TABLE messages (
     FOREIGN KEY (sender_id) REFERENCES users(user_id),
     FOREIGN KEY (receiver_id) REFERENCES users(user_id)
 );
+GO
 
+-- 16. Bảng notifications
 CREATE TABLE notifications (
     notification_id INT PRIMARY KEY IDENTITY,
     user_id INT,
@@ -151,8 +181,9 @@ CREATE TABLE notifications (
     is_read BIT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
--- 6. FORUMS
+-- 17. Bảng forums
 CREATE TABLE forums (
     forum_id INT PRIMARY KEY IDENTITY,
     course_id INT,
@@ -162,7 +193,9 @@ CREATE TABLE forums (
     FOREIGN KEY (course_id) REFERENCES courses(course_id),
     FOREIGN KEY (created_by) REFERENCES users(user_id)
 );
+GO
 
+-- 18. Bảng forum_posts
 CREATE TABLE forum_posts (
     post_id INT PRIMARY KEY IDENTITY,
     forum_id INT,
@@ -172,8 +205,9 @@ CREATE TABLE forum_posts (
     FOREIGN KEY (forum_id) REFERENCES forums(forum_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
--- 7. QUIZ SYSTEM (NEW)
+-- 19. Bảng quizzes
 CREATE TABLE quizzes (
     quiz_id INT PRIMARY KEY IDENTITY,
     course_id INT,
@@ -182,7 +216,9 @@ CREATE TABLE quizzes (
     created_at DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+GO
 
+-- 20. Bảng questions
 CREATE TABLE questions (
     question_id INT PRIMARY KEY IDENTITY,
     quiz_id INT,
@@ -194,7 +230,9 @@ CREATE TABLE questions (
     correct_option CHAR(1) CHECK (correct_option IN ('A','B','C','D')),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id)
 );
+GO
 
+-- 21. Bảng quiz_submissions
 CREATE TABLE quiz_submissions (
     quiz_submission_id INT PRIMARY KEY IDENTITY,
     quiz_id INT,
@@ -204,12 +242,9 @@ CREATE TABLE quiz_submissions (
     FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id),
     FOREIGN KEY (student_id) REFERENCES students(student_id)
 );
-ALTER TABLE admins
-ADD CONSTRAINT DF_admin_avatar DEFAULT 'data:image/png;base64,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' FOR avatar_url;
-ALTER TABLE students
-ADD avatar_url NVARCHAR(255) CONSTRAINT DF_student_avatar DEFAULT 'data:image/png;base64,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';
-ALTER TABLE lecturers
-ADD avatar_url NVARCHAR(255) CONSTRAINT DF_lecturer_avatar DEFAULT 'data:image/png;base64,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';
+GO
+
+-- 22. Bảng password_resets (thêm index idx_token)
 CREATE TABLE password_resets (
     reset_id INT PRIMARY KEY IDENTITY,
     user_id INT,
@@ -218,8 +253,62 @@ CREATE TABLE password_resets (
     is_used BIT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+GO
 
--- Index giúp tìm nhanh hơn theo token
 CREATE INDEX idx_token ON password_resets(token);
-ALTER TABLE users
-ADD avatar_url NVARCHAR(255) CONSTRAINT DF_user_avatar DEFAULT 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADACAMAAAB/Pny7AAAA8FBMVEX///8Qdv8QUuf///0QUegNdP////sAcv8Ab/8Abf/M4vASX+8Ab/3n7vgAbvgETufR4PP0//sAaf0ASeU6YuMyW+fe8PcAafbC1velwfGWufCOsvL1/P3u9vh7qfh3pvgARucRWOu10vBglOmnxuw0fOValuYAbOdYk/EAYPgAZ+o9hPJMi+TH3/duoONwnuwdefe0yvRunfZ6pe1LiOk6gfuRu+y11eurvuU3YtmRpuCitOO7xuvG1OlJjPYdc+iNnOFOcOFceOJlg93Jz+wANt6kte58kNp1kOgAQMkZOdQOTNUAKNkfU9FMb9I9Zs4gMZ6mAAAPKUlEQVR4nO1dC1fiuhZum6ZFoA+sFIH2TAUclQ6KgzoKPlB08Dgz3v//b26StohjH0la1LMW39KjI5yGr/uRnb13E0FYY4011lhjjTXWWGONNdbgBgi+AfkG+Af5JXxl8QP9BYAP+oj0AITDCxnl1b+E5X98fjLBxwXRpwWOa9smgW27DpFQ+Mp/gQthowhCrdxpjbon/inCkHydnu6edEetTrmG3qb8FyRDbrrdO9zVdRGKIkRQYQhVxb+Kur572LPBwoo+HxAJBYtEsXtf9yqbVVUUMZkElDYre197NpajsOwdPg2Q3rj2mV85QLc/kcULYHWz75/ZrvAZTQi4ZvMEiYSGSAR1s/KtabpYOsqnIYM+jbY92ttUg3tOyYe8T93cG21riqB8NAchcsSK2dzXNyAxElrJwOitcEPfb5rhvPOhPo5oiNm+blQZtOsNqo3rtrmYVD+MCxq73PYbah4qGGpE5wMlAwS75eu5qWCNU/Xrlg0+UDIA9HwxfUZhgCr6vY+QTHAHQbmrq4XwCAH1rh24gXflQqKrs34BCvaajdo/w1POO7MBwD45KJgKZiMe7NrK+9oNilx6/Y3iuWCo/Z77vly0kV6ksUQg11T1kfZeTk1RgDLYb6yAyoKRvj94H7eGRnF6fml1XDBKfs95HzJOa5greMkGFKvD1juwAUptJBbtkf+iQqJpceSsWNXQ5WtfiwhfsgmhCdRZ7SIHTWjfVmwuL6h+c1a6ZlOck2oxgRgFYOmktjpNA4pL5MLEJszJwCAzw8am+s1djWjwMt09YosroS6SfFmEoYjtjfoSaF1w5K5ENDj5MtIZiOCQ/nvruPyCQafV9cXqy4o56wpo+hythA3i0sYBP3W2QvfbA0d4iedJLFwbtH2WQAjqbXcVZJzmkEHp1f4oXNUv3w8Mc9Snsx7yHjhsOgUTwRbTuaHS9zDlstdzg9Te0mIrXOO7vT2q1WnwhupNBxSbysWrSp/OKcPgE7yKFF9/EgAGe9QJKRTZ+GWlwNUaKU3sU0+WUCzdmEry8OgV86YqUro1dLWTIgMbrGWHm5Smj13VjQlSMpQka3hDZ3/E8W0cFqlmQPlRGdLeSmQvA5AiGGI6CpOmHfwokkutT+/H4F4nWymQP6Fmg9B3FaWg1C1QjhgCZb1N4UuB4rQZFqtqVymq1AZ6DOGYem3SXdT0WZbevaLyT+VrloisTWesQJhK1PKG8NouQjJomTxioAJPe3SXFYTL+k44w1LdIyc/GXSF7VMGi1F9k0oyeLK5MHaoRa6ebhfgnlHcz5K+UK9tWuXWbg2pItJW2qpH+SNOAHpDBi6ifqLRcQFAu7MkaYf2wnBIp7+pY2rfmfJKepdOt3H6bWbJEpENDRex1NXyclGOG0zLZDiiV+25jMhIFdrLNzp5A06NPsAkQMpAJxn0fb5jIDIyFRv0HnVfyzfZgA6lGkRjnpapc95A2zKwbAI2FIwqHSVXjd39xpaJVX36rCpwbolkEBudatmndnMkBNA9HjBm++E1ZaoLh86YDLaayG7S+aBXGwPuOhRe8x4xVpSwmlF6ZgDMrYgMpd1sHHHHNLjU12fjgtCmlAz6moZUEIwKVd6nb/NRQVDA2SYrFxVHhHRkUAQQkaGdbzbPeDOcyHXssXIRoT+gvf594MxCNjIVmz0+KgigzF5PhqcdyotjMtIyaOzmoMzN5pCjfEEfQk3q8isyRDYZhEqHnFRArc9TvmjRes+x/JpMIJuMEfdqnGw6rDUIjMaI7k6hlab3WjBypqZhrpRa/Ga4Q9Z6Ch6tP6JyOMiBT6U3osm2GxzIss41+O3uNXvxEvrNK6qABs3/95MLOVbT0lQNXrOnN/H7ByxZ/2AkYjG04QyyGumNaOQMu4HDAXPkjMdqMfeRobf/oGzmI/2ynRhFy4xsqB3MMhlwRF1ZWsI2pRKQlcnlGyrZbPQj5vAMjeWesPZhYAU5Zrlv50Ycm3QvUD1hL9qimNZnlQsyMdgWGBqSpkYMFTldNvCUvUkICGxZmYhOl0Uys1jJZMw3tAvzV2gzlJZfyPj02a1o2RxDJk02epuVCRBqX3j6SuCpSZd0wKpyVY9TsywvUP1SY7YZe5+rDwvHmXRkFGGyE2v/GWyq+8wrNGAypf5fMKIt2eEygPx21sz0abQ1k+WRtk+5yKhdOiXA0ptZMZPmEhsxdtaGp9vMZI45nBkeyjep9Ay9w7xINJmFbOLIDI+ZyTS5uCAcmS5FSAPcq8c0sSw07W18qDdZyYAWh2cmGA6nmpBWOifQpn9S7IUgfvaEUG8xzjNAYamfvsYGstBMMuatlyWXpNmz0WaMZ4Az4iaDexoyRzP/ZBhMpGkxZEasjbXuP/zd8ZXt1MHIk13bD1RcIk1bFtDGP6zt9e4XfjKbGT3JOBT9SUkmJg+98YWVjPadnwzO1qfOnEDQ0BxDJxn5jRcofWctoeUhA/fMNN+Mn7U1JTqTiWEDecjk6F/ebKX2u6EXx9RaJkl/Z255yPD3+0Pc15QSBqTGy/FslmXDTAbkkoxY3bWTszTIYi4oLWaZzYJP9Z3JiNVrN9ls7Asv+/O/4hKwgbySyeOaCZtvbpLR2M+MXAgWdgPZXXOeSTNi8zbqwLsG2M9WZiCTwgayT5p5wpmITWz1AQhzLzNajsWi4sEczgCmRr1YwJjGM2xH0/hkWTaZyKc12qxk+JcAERexFXvduAQzFZdF9wNaAjBxybM4izBsxvgz9Je0NEYWoUDTWBdnAu+yeYlMJ+4GAuGyzk2GsFE5ls2cCY0FSBo17sJXW0yz/1+ocCU0TI5S0zLUUztuogFAy8pjpAgGz54cqSbeJGAkl9LBt3ifA5zn30srZnaV2/nOngTkSs/CoIinHvQPB1pMCz12CYq2Pbd+44nzbRGQBt4j6wM1aFCOxDmhAjcrXwdOtHlWzJXRn53t2YMXmzXPhjVlLZ0B1kbTBZ/qzVlkLDFkgh0esMzs8R/L4JCNXJ8wCgYPO2B3Z6o63O254dNZ8UFztMcZFs/5rcQephlbV8zVGQDcE5V6cx8iE6gP9ztO9FxW/Igg+iJwLp/rIR1qUsYdXdvUKy6kQMuC6nC/V2MaB6mbcz4jdNLKAX+ReeSpNrOVzlVxv+kKac8Axd8x4E7uDIueiySNmR9zwmrC0tRQ9VsaTskyDRMaj/bzwqNmI9ev2Jsa8Ox2TU2m+tUUOJ4LAwLh75gz2rWnbNxyPq0xog1oGiPe/UjCz6XNPRKrZFGRZOuRr08bdCiNZvMo50OuuIrmUXg0RMa4VPjatGt0vbNwz8n7aAtStX/Ta4IhGempRlcAfgu6tsZKmfNmvXBBGDzQqJk3T5yOszCgaTitjtgcchIhbDaZevZwxXt5kNkKjN1dv5i9lYD5lC0Y4xfvgw1I9hRN2qUjl8Mpx8B9zPbPD2Puoaja5xu4TFaEnimXT1lcjCfKZ8DiuAhK5oMNqp/34anFcOnraezqvEf+BxtQJDiopM81cIN7vnwznDtP0zNkMMj8uXfXwj4w82GgxnFR23kC0MzQM+8uMRlPc30l6zEtuJdeWWYa7f5Xqp5JD5cC/zY0OKrVUpM0UL02iyIDgHmbWoOynrnNPxqik5pA3/iuFbfvgJYePD8d53WaQOumiYY5I58ykpDuAbxZXsFkNZ42WJtyUof6mUJG/nWefwTgHqUk0BrN4rRMSCVjPeZXaHQB8gh9wmSjNwuTDK52JJMxti7zB00gfXODAtUMACVRMrJszIvY3AA30l4n7gRWGhW3L1RiCIAiGePWLCCcJSm9XuKWhtAvbJ5Ja9qUpXOhgL2cg2xQNzG1UZQHwOr8M7E50JsVsgAkUNBSIDbtBEV4U07K9zMxwQFAUjQjy092cfJXlB8HSbONuhtXiGEECgIVLbkJ5fd2odvPgcOEhQ2EKpJNzm0I8XY/5T9WUg7AmxfEIgAQnJNqTMt00HFYGWta8C7ey2va+CEx1eQ9O0KB5wZgjS771cRsbeXX46XpRrnjqKYR530WBTUQbi2OQwzz+PFXcmOwtVWgw4w+Recm+WiJkvVwMZ3ca2RDQyU6gSapRkP2BAu4Otp9c3rxlNJOY9VZK+UUZBSnOYx30LjHXd+xvKet2XSCJKSA6BPHXEZYNDwqmnk/mc7+PHlpqxijPil4g8OAjduO3zSStLVVd9A07XnS1t3jdHx+b9opSwPHNu/Px/PZ3ZbleUZQdk4QjWxMV7ORpuCOYuPNcFdF0hIjGxa60fWt27vZbD4dTyaX91dXwTFHV1f3l5PJeDp/nN3dbtUNz7KM9H4AnPSfr2aLUwT3CJc5EwjpOy9bFRgWgmFIO/X61gvqCFL4EkVtCXOZrYwLCgXxRrrxbgAiu5GX7nCoPcYrYG2Sk5XqbzYeWfWvhg3eevok0QmgYCBqvloUkKMPH/5ZllhKsZL3P6egbGksFMVJ2Hw6mD4jGrK0VAh7/YOaDZILWsIoq9x+GtS+ppxkBHdY6sapMKyZoxS8UesbKA7esD0pGNB3iqEiGdIcKKs/hyLYSj/BCyz7tDyw6mMHFLRzZhoXFHSmHXKg87dgLiB7F+dOUnhXMBkABvvJhqPnthvZer4PQ9JVqxmGkngwCAxjgRx0DGteYM43E4Ac2ZKYF6jyywb9b9a/5+96ZIuQfJgOjNhwcpEfLvh3yuImgybQs0pMqjOIBXgkg5XTepqEa7d3hgLsrp6UtJFYzCaKGAzrmW5/1NXQ6fkJM44qMdAJuucs+WKSu3GFE8FaUmv5eimOEFMsgO3euB1rLLuJrIANAPhkQFVcfj58ebVGCcu7nZpJa+13ohOkojGdmJCAmo3sebfjoMHvI88GJIyQYyNHUL6Zd7LZkAWOZ939NAFjf+eqAP46HPTFpWXMnvhF7+HX/FJTiszy5ULYXh4c26ouccmKOmXL+/08CY5t/SxkwrZs9F/XbvmNzY3AFxA3oOPbH0vI8B4eLsaaC1LPEPhgBEcdl6IjgtUl65CCqVGWMZF/Zz37HVZfeRCkj/Eh1KIenHBUIlmZpfyMZDxdzM9xAAYyN6f4YCz8a3g8+K5/Q/JlCFsXt8+z+fi87ArhkycrXuHnRrSiCicMfHC7eYVhmrYWZY1f5sZPzSVMc4VMwkdlFq8sfv/AM4DXWGONNdZYY4011lhjjTU+I/4P0EdBunobKkUAAAAASUVORK5CYII=';
+GO
+
+CREATE PROCEDURE RegisterUser
+    @username NVARCHAR(50),
+    @password NVARCHAR(255),
+    @role NVARCHAR(20),
+    @email NVARCHAR(100) = NULL,
+    @full_name NVARCHAR(100) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra role hợp lệ
+    IF @role NOT IN ('admin', 'student', 'lecturer')
+    BEGIN
+        RAISERROR('Role phải là admin, student hoặc lecturer', 16, 1);
+        RETURN;
+    END
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Thêm user vào bảng users
+        INSERT INTO users (username, password, role, email)
+        VALUES (@username, @password, @role, @email);
+
+        DECLARE @newUserId INT = SCOPE_IDENTITY();
+
+        -- Tùy role, thêm bản ghi tương ứng
+        IF @role = 'admin'
+        BEGIN
+            INSERT INTO admins (user_id, full_name, email)
+            VALUES (@newUserId, @full_name, @email);
+        END
+        ELSE IF @role = 'student'
+        BEGIN
+            INSERT INTO students (user_id, full_name, email)
+            VALUES (@newUserId, @full_name, @email);
+        END
+        ELSE IF @role = 'lecturer'
+        BEGIN
+            INSERT INTO lecturers (user_id, full_name, email)
+            VALUES (@newUserId, @full_name, @email);
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+
+        DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
+        RAISERROR(@ErrMsg, 16, 1);
+    END CATCH
+END
+GO
+
