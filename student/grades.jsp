@@ -118,81 +118,78 @@
         }
     </style>
 </head>
-<body>
-<div class="min-h-screen flex">
-    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm">
-        <div class="p-4 border-b border-gray-200 flex items-center">
-            <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
-            <span class="ml-2 text-lg font-semibold text-gray-800">LMS</span>
-        </div>
-        <nav class="flex-1 pt-4 pb-4 overflow-y-auto custom-scrollbar">
-            <ul>
-                <li class="px-4 py-2">
-                    <a href="./dashboard.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-dashboard-line"></i>
+    <body class="bg-gray-100 font-sans text-gray-900">
+        <div class="flex h-screen">
+            <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 shadow-lg hidden md:flex flex-col">
+                <div class="flex items-center px-6 py-3 border-b border-gray-200">
+                    <div class="text-2xl font-['Pacifico'] text-primary">logo</div>
+                </div>
+                <nav class="p-4 space-y-1 flex-1">
+                    <a href="dashboard.jsp" class="w-full px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-dashboard-line"></i>
+                            </div>
+                            <span>Dashboard</span>
                         </div>
-                        <span>Trang chủ</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./courses.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-book-open-line"></i>
+                    <a href="courses.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-book-open-line"></i>
+                            </div>
+                            <span>Khóa học</span>
                         </div>
-                        <span>Khóa học của tôi</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./calendar.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-calendar-line"></i>
+                    <a href="assignments.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-file-list-line"></i>
+                            </div>
+                            <span>Bài tập</span>
                         </div>
-                        <span>Lịch học</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./assignments.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-file-list-3-line"></i>
+                    <a href="grades.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-bar-chart-line"></i>
+                            </div>
+                            <span>Điểm số</span>
                         </div>
-                        <span>Bài tập/Kiểm tra</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./grades.jsp" class="flex items-center text-primary font-medium">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-bar-chart-line"></i>
+                    <a href="forum.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-question-answer-line"></i>
+                            </div>
+                            <span>Diễn đàn</span>
                         </div>
-                        <span>Điểm số</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./forum.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-discuss-line"></i>
+                    <a href="calendar.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-calendar-line"></i>
+                            </div>
+                            <span>Lịch</span>
                         </div>
-                        <span>Diễn đàn</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./documents.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-file-paper-2-line"></i>
+                    <a href="documents.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-calendar-line"></i>
+                            </div>
+                            <span>Tài Liệu</span>
                         </div>
-                        <span>Tài liệu</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./settings.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-settings-3-line"></i>
+                    <a href="settings.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-settings-line"></i>
+                            </div>
+                            <span>Cài đặt</span>
                         </div>
-                        <span>Cài đặt</span>
                     </a>
-                </li>
-            </ul>
-        </nav>
+                </nav>
         <div class="p-4 border-t border-gray-200">
             <div class="flex items-center">
                 <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520photo%2520of%2520a%2520young%2520vietnamese%2520male%2520student%2520with%2520short%2520black%2520hair%252C%2520casual%2520outfit%252C%2520neutral%2520background%252C%2520friendly%2520smile&width=100&height=100&seq=1&orientation=squarish" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
@@ -201,16 +198,16 @@
                     <p class="text-xs text-gray-500">SV2023405</p>
                 </div>
             </div>
-            <button class="mt-3 w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-primary !rounded-button">
-                <div class="w-4 h-4 flex items-center justify-center">
-                    <i class="ri-logout-box-line"></i>
-                </div>
-                <span class="whitespace-nowrap">Đăng xuất</span>
-            </button>
+                <a href="http://localhost:8080/WebApplication2/" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-button">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-logout-box-line"></i>
+                    </div>
+                    <span>Đăng xuất</span>
+                </a>
         </div>
-    </aside>
+            </aside>
 
-    <div class="flex-1 flex flex-col">
+    <div class="max-w-7xl mx-auto" style="    margin-left: 300px;">
         <header class="bg-white border-b border-gray-200 shadow-sm">
             <div class="flex items-center justify-between px-4 py-3">
                 <button class="md:hidden w-10 h-10 flex items-center justify-center text-gray-600" id="mobileMenuBtn">
@@ -428,14 +425,6 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mt-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-3">Đề xuất cải thiện điểm</h2>
-                    <p class="text-sm text-gray-600">
-                        Dựa trên kết quả học tập của bạn, chúng tôi đề xuất bạn nên dành thêm thời gian ôn tập môn "Mạng máy tính" để cải thiện điểm tổng kết. Bạn có thể xem lại tài liệu học tập, tham gia nhóm học, hoặc tìm kiếm sự hỗ trợ từ giảng viên.
-                    </p>
-                </div>
-
             </div>
         </main>
     </div>

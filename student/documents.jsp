@@ -2,19 +2,51 @@
 <%@ page pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
-<head>  
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tài liệu - Hệ thống Quản lý Học tập</title>
-    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script>tailwind.config={theme:{extend:{colors:{primary:'#4f46e5',secondary:'#818cf8'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
-    <style>
-        :where([class^="ri-"])::before { content: "\f3c2"; }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hệ thống Quản lý Học tập - Sinh viên</title>
+        <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+        <script>tailwind.config = {theme: {extend: {colors: {primary: '#4f46e5', secondary: '#818cf8'}, borderRadius: {'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px'}}}}</script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+        <style>
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f9fafb;
+            }
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 8px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #c5c7d0;
+                border-radius: 8px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #a1a3af;
+            }
+            progress.course-progress::-webkit-progress-bar {
+                background-color: #e5e7eb;
+                border-radius: 9999px;
+            }
+            progress.course-progress::-webkit-progress-value {
+                background-color: #4f46e5;
+                border-radius: 9999px;
+            }
+            :where([class^="ri-"])::before { content: "\f3c2"; }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f9fafb;
@@ -34,83 +66,80 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #9ca3af;
         }
-    </style>
-</head>
-<body>
-<div class="min-h-screen flex">
-    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm">
-        <div class="p-4 border-b border-gray-200 flex items-center">
-            <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
-            <span class="ml-2 text-lg font-semibold text-gray-800">LMS</span>
-        </div>
-        <nav class="flex-1 pt-4 pb-4 overflow-y-auto custom-scrollbar">
-            <ul>
-                <li class="px-4 py-2">
-                    <a href="./dashboard.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-dashboard-line"></i>
+        </style>
+    </head>
+    <body class="bg-gray-100 font-sans text-gray-900">
+        <div class="flex h-screen">
+            <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 shadow-lg hidden md:flex flex-col">
+                <div class="flex items-center px-6 py-3 border-b border-gray-200">
+                    <div class="text-2xl font-['Pacifico'] text-primary">logo</div>
+                </div>
+                <nav class="p-4 space-y-1 flex-1">
+                    <a href="dashboard.jsp" class="w-full px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-dashboard-line"></i>
+                            </div>
+                            <span>Dashboard</span>
                         </div>
-                        <span>Trang chủ</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./courses.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-book-open-line"></i>
+                    <a href="courses.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-book-open-line"></i>
+                            </div>
+                            <span>Khóa học</span>
                         </div>
-                        <span>Khóa học của tôi</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./calendar.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-calendar-line"></i>
+                    <a href="assignments.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-file-list-line"></i>
+                            </div>
+                            <span>Bài tập</span>
                         </div>
-                        <span>Lịch học</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./assignments.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-file-list-3-line"></i>
+                    <a href="grades.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-bar-chart-line"></i>
+                            </div>
+                            <span>Điểm số</span>
                         </div>
-                        <span>Bài tập/Kiểm tra</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./grades.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-bar-chart-line"></i>
+                    <a href="forum.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-question-answer-line"></i>
+                            </div>
+                            <span>Diễn đàn</span>
                         </div>
-                        <span>Điểm số</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./forum.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-discuss-line"></i>
+                    <a href="calendar.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-calendar-line"></i>
+                            </div>
+                            <span>Lịch</span>
                         </div>
-                        <span>Diễn đàn</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./documents.jsp" class="flex items-center text-primary font-medium">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-file-paper-2-line"></i>
+                    <a href="documents.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-calendar-line"></i>
+                            </div>
+                            <span>Tài Liệu</span>
                         </div>
-                        <span>Tài liệu</span>
                     </a>
-                </li>
-                <li class="px-4 py-2">
-                    <a href="./settings.jsp" class="flex items-center text-gray-600 hover:text-primary">
-                        <div class="w-6 h-6 flex items-center justify-center mr-3">
-                            <i class="ri-settings-3-line"></i>
+                    <a href="settings.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button block">
+                        <div class="flex items-center">
+                            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                                <i class="ri-settings-line"></i>
+                            </div>
+                            <span>Cài đặt</span>
                         </div>
-                        <span>Cài đặt</span>
                     </a>
-                </li>
-            </ul>
-        </nav>
+                </nav>
         <div class="p-4 border-t border-gray-200">
             <div class="flex items-center">
                 <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520photo%2520of%2520a%2520young%2520vietnamese%2520male%2520student%2520with%2520short%2520black%2520hair%252C%2520casual%2520outfit%252C%2520neutral%2520background%252C%2520friendly%2520smile&width=100&height=100&seq=1&orientation=squarish" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
@@ -119,59 +148,53 @@
                     <p class="text-xs text-gray-500">SV2023405</p>
                 </div>
             </div>
-            <button class="mt-3 w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-primary !rounded-button">
-                <div class="w-4 h-4 flex items-center justify-center">
-                    <i class="ri-logout-box-line"></i>
-                </div>
-                <span class="whitespace-nowrap">Đăng xuất</span>
-            </button>
-        </div>
-    </aside>
-
-    <div class="flex-1 flex flex-col">
-        <header class="bg-white border-b border-gray-200 shadow-sm">
-            <div class="flex items-center justify-between px-4 py-3">
-                <button class="md:hidden w-10 h-10 flex items-center justify-center text-gray-600" id="mobileMenuBtn">
-                    <i class="ri-menu-line text-xl"></i>
-                </button>
-                <a href="./dashboard.jsp" class="hidden md:flex items-center text-gray-600 hover:text-primary">
-                    <div class="w-8 h-8 flex items-center justify-center">
-                        <i class="ri-arrow-left-line text-xl"></i>
+                <a href="http://localhost:8080/WebApplication2/" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-button">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-logout-box-line"></i>
                     </div>
-                    <span class="ml-1 text-sm font-medium">Quay lại</span>
+                    <span>Đăng xuất</span>
                 </a>
-                <div class="md:hidden flex items-center">
-                    <span class="text-xl font-['Pacifico'] text-primary">logo</span>
-                    <span class="ml-1 text-base font-semibold text-gray-800">LMS</span>
-                </div>
-                <div class="hidden md:flex items-center flex-1 max-w-lg mx-4">
-                    <div class="relative w-full">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i class="ri-search-line text-gray-400"></i>
-                        </div>
-                        <input type="text" class="bg-gray-50 border-none text-gray-900 text-sm rounded-lg block w-full pl-10 p-2.5 focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Tìm kiếm khóa học, tài liệu...">
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full">
-                            <i class="ri-notification-3-line"></i>
-                        </button>
-                        <span class="absolute top-1 right-1 w-5 h-5 flex items-center justify-center bg-red-500 text-white text-xs rounded-full">3</span>
-                    </div>
-                    <button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full">
-                        <i class="ri-message-3-line"></i>
-                    </button>
-                    <div class="md:hidden">
-                        <button class="w-10 h-10 flex items-center justify-center">
-                            <img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%2520a%2520young%2520vietnamese%2520male%2520student%2520with%2520short%2520black%2520hair%252C%2520casual%2520outfit%252C%2520neutral%2520background%252C%2520friendly%2520smile&width=100&height=100&seq=1&orientation=squarish" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
+        </div>
+            </aside>
 
-        <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 custom-scrollbar">
+            <div class="flex-1 flex flex-col md:ml-64">
+                <header class="bg-white border-b border-gray-200 shadow-sm fixed top-0 z-40 w-full md:w-[calc(100%-16rem)] md:left-64">
+                    <div class="flex items-center justify-between px-4 py-3">
+                        <button class="md:hidden w-10 h-10 flex items-center justify-center text-gray-600">
+                            <i class="ri-menu-line text-xl"></i>
+                        </button>
+                        <div class="md:hidden flex items-center">
+                            <span class="text-xl font-['Pacifico'] text-primary">logo</span>
+                            <span class="ml-1 text-base font-semibold text-gray-800">LMS</span>
+                        </div>
+                        <div class="hidden md:flex items-center flex-1 max-w-lg mx-4">
+                            <div class="relative w-full">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <i class="ri-search-line text-gray-400"></i>
+                                </div>
+                                <input type="text" class="bg-gray-50 border-none text-gray-900 text-sm rounded-lg block w-full pl-10 p-2.5 focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Tìm kiếm khóa học, tài liệu...">
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full">
+                                    <i class="ri-notification-3-line"></i>
+                                </button>
+                                <span class="absolute top-1 right-1 w-5 h-5 flex items-center justify-center bg-red-500 text-white text-xs rounded-full">3</span>
+                            </div>
+                            <button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full">
+                                <i class="ri-message-3-line"></i>
+                            </button>
+                            <div class="md:hidden">
+                                <button class="w-10 h-10 flex items-center justify-center">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20vietnamese%20male%20student%20with%20short%20black%20hair%2C%20casual%20outfit%2C%20neutral%20background%2C%20friendly%20smile&amp;width=100&amp;height=100&amp;seq=1&amp;orientation=squarish" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+       <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 custom-scrollbar">
             <div class="max-w-7xl mx-auto">
                 <nav class="flex mb-4" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
