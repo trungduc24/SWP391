@@ -1,1592 +1,638 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page pageEncoding="UTF-8" %>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grades Management - Student Portal</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <title>Quản lý Điểm số - Hệ Thống LMS</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#6366f1'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        :where([class^="ri-"])::before { content: "\f3c2"; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
         }
-
-        .container {
-            display: flex;
-            min-height: 100vh;
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c5c7d0;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a1a3af;
+        }
+        .custom-checkbox {
             position: relative;
-        }
-
-        .sidebar.collapsed {
-            width: 70px;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .logo-text {
-            color: white;
-            font-size: 20px;
-            font-weight: 700;
-            transition: opacity 0.3s ease;
-        }
-
-        .sidebar.collapsed .logo-text {
-            opacity: 0;
-        }
-
-        .nav-menu {
-            padding: 20px 0;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #feca57;
-        }
-
-        .nav-item i {
-            width: 20px;
-            margin-right: 15px;
-            text-align: center;
-        }
-
-        .sidebar.collapsed .nav-item span {
-            display: none;
-        }
-
-        .toggle-btn {
-            position: absolute;
-            top: 20px;
-            right: -15px;
-            width: 30px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-bar {
-            flex: 1;
-            max-width: 400px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 14px;
-        }
-
-        .search-bar input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .search-bar i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .notification-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .notification-icon:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff6b6b;
-            color: white;
-            border-radius: 50%;
+            display: inline-block;
             width: 20px;
             height: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
+        .custom-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
-
-        .user-profile:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .user-info {
-            color: white;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .user-role {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        /* Breadcrumb */
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-        }
-
-        .breadcrumb a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .breadcrumb a:hover {
-            color: white;
-        }
-
-        /* Page Header */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .page-title {
-            color: white;
-        }
-
-        .page-title h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .page-subtitle {
-            font-size: 16px;
-            opacity: 0.8;
-        }
-
-        .add-btn {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Filters Section */
-        .filters-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .filters-row {
-            display: grid;
-            grid-template-columns: 1fr 200px 200px 200px 200px auto;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .filter-label {
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .filter-input {
-            padding: 12px 15px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 14px;
-        }
-
-        .filter-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .filter-select {
-            padding: 12px 15px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .clear-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .clear-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Statistics Cards */
-        .stats-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .stat-title {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        .stat-trend {
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .trend-up {
-            color: #4ecdc4;
-        }
-
-        .trend-down {
-            color: #ff6b6b;
-        }
-
-        /* Charts Section */
-        .charts-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .chart-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .chart-title {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .chart-container {
-            height: 300px;
-            position: relative;
-        }
-
-        /* Data Table */
-        .table-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .table-title {
-            color: white;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .table-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .data-table td {
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .data-table tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .status-submitted {
-            background: rgba(78, 205, 196, 0.2);
-            color: #4ecdc4;
-        }
-
-        .status-graded {
-            background: rgba(254, 202, 87, 0.2);
-            color: #feca57;
-        }
-
-        .status-pending {
-            background: rgba(255, 107, 107, 0.2);
-            color: #ff6b6b;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            padding: 5px;
-            margin: 0 2px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .pagination-info {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-        }
-
-        .pagination-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .page-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .page-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .page-btn.active {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
+        .checkmark {
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            transition: all 0.2s ease;
         }
-
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
         }
-
-        .modal-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 500px;
-            width: 90%;
-            color: white;
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
         }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
+        .custom-checkbox input:checked ~ .checkmark:after {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
         }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 14px;
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
         }
-
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+        .custom-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
         }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 12px;
+        .switch-slider {
+            position: absolute;
             cursor: pointer;
-            transition: all 0.3s ease;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e7eb;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        .custom-switch input:checked + .switch-slider {
+            background-color: #4f46e5;
+        }
+        .custom-switch input:checked + .switch-slider:before {
+            transform: translateX(20px);
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .charts-section {
-                grid-template-columns: 1fr;
+        /* Responsive Table (Card View on Mobile) */
+        @media screen and (max-width: 767px) {
+            .table-responsive thead {
+                display: none;
+            }
+            .table-responsive tbody, .table-responsive tr {
+                display: block;
+                width: 100%;
+            }
+            .table-responsive tr {
+                margin-bottom: 1rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            }
+            .table-responsive td {
+                display: block;
+                width: 100%;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 0.75rem 1rem;
+                text-align: right;
+                position: relative;
+                padding-left: 50%; /* Space for the data-label */
+            }
+            .table-responsive td:last-child {
+                border-bottom: 0;
+            }
+            .table-responsive td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 1rem;
+                width: calc(50% - 1rem);
+                text-align: left;
+                font-weight: 500;
+                color: #4b5563;
+            }
+            .table-responsive td.actions-cell {
+                text-align: left;
+                padding-left: 1rem;
+            }
+            .table-responsive td.actions-cell::before {
+                content: none;
             }
         }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -280px;
-                z-index: 100;
-            }
-
-            .sidebar.show {
-                left: 0;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .filters-row {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-section {
-                grid-template-columns: 1fr;
-            }
-
-            .header {
-                padding: 15px 20px;
-            }
-
-            .content-area {
-                padding: 20px;
-            }
-
-            .table-container {
-                font-size: 14px;
-            }
-
-            .data-table th,
-            .data-table td {
-                padding: 10px 8px;
-            }
+        .editable-grade {
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 4px 8px;
+            width: 60px; /* Adjust width as needed */
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .editable-grade:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <button class="toggle-btn" onclick="toggleSidebar()">
-                <i class="fas fa-chevron-left"></i>
+<body class="min-h-screen flex">
+<aside class="fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-200 z-50 hidden lg:flex flex-col justify-between">
+    <div class="flex items-center px-6 py-3 border-b border-gray-200">
+        <div class="text-2xl font-['Pacifico'] text-primary">logo</div>
+    </div>
+    <nav class="p-4 space-y-1 flex-1">
+        <a href="dashboard.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-dashboard-line"></i>
+                </div>
+                <span>Dashboard</span>
+            </div>
+        </a>
+        <a href="courses.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <span>Khóa học</span>
+            </div>
+        </a>
+        <a href="assignments.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <span>Bài tập</span>
+            </div>
+        </a>
+       <a href="grades.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <span>Điểm số</span>
+            </div>
+        </a>
+        <a href="forum.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <span>Diễn đàn</span>
+            </div>
+        </a>
+        <a href="materials.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <span>Tài liệu</span>
+            </div>
+        </a>
+        <a href="settings.jsp" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-button">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <span>Cài đặt</span>
+            </div>
+        </a>
+    </nav>
+    <div class="p-4 border-t border-gray-200">
+        <div class="flex items-center gap-3 mb-3 px-3">
+            <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border">
+                <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20Vietnamese%20female%20teacher%20with%20glasses%2C%20smiling%2C%20professional%20attire%2C%20neutral%20background%2C%20high%20quality%20portrait&width=200&height=200&seq=1&orientation=squarish" alt="Avatar" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-900 truncate">Nguyễn Thị Minh</p>
+                <p class="text-xs text-gray-500 truncate">Giảng viên</p>
+            </div>
+        </div>
+                <a href="http://localhost:8080/WebApplication2/" class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-button">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-logout-box-line"></i>
+                    </div>
+                    <span>Đăng xuất</span>
+                </a>
+    </div>
+</aside>
+<header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50">
+    <div class="flex items-center justify-between px-6 py-3">
+        <div class="flex items-center">
+            <button class="p-2 text-gray-600 hover:text-primary rounded-full lg:hidden">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-menu-line"></i>
+                </div>
             </button>
-            
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="logo-text">EduPortal</div>
-            </div>
-            
-            <nav class="nav-menu">
-                <a href="#" class="nav-item">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Students</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-book"></i>
-                    <span>Courses</span>
-                </a>
-                <a href="#" class="nav-item active">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Grades</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-calendar"></i>
-                    <span>Schedule</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Assignments</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </nav>
+            <div class="text-2xl font-['Pacifico'] text-primary ml-2">logo</div>
         </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Header -->
-            <header class="header">
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search students, courses, grades...">
+        <div class="flex items-center space-x-4">
+            <button class="relative p-2 text-gray-600 hover:text-primary rounded-full">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-search-line"></i>
                 </div>
-                
-                <div class="header-actions">
-                    <div class="notification-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </div>
-                    <div class="notification-icon">
-                        <i class="fas fa-envelope"></i>
-                        <span class="badge">7</span>
-                    </div>
-                    <div class="user-profile" onclick="toggleUserMenu()">
-                        <div class="avatar">JD</div>
-                        <div class="user-info">
-                            <div class="user-name">John Doe</div>
-                            <div class="user-role">Teacher</div>
-                        </div>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
+            </button>
+            <button class="relative p-2 text-gray-600 hover:text-primary rounded-full">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-notification-3-line"></i>
                 </div>
-            </header>
-
-            <!-- Content Area -->
-            <div class="content-area">
-                <!-- Breadcrumb -->
-                <nav class="breadcrumb">
-                    <a href="#">Dashboard</a>
-                    <i class="fas fa-chevron-right"></i>
-                    <span>Grades Management</span>
-                </nav>
-
-                <!-- Page Header -->
-                <div class="page-header">
-                    <div class="page-title">
-                        <h1>Grades Management</h1>
-                        <p class="page-subtitle">Manage and track student grades across all courses</p>
+                <span class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs flex items-center justify-center rounded-full">5</span>
+            </button>
+            <div class="relative">
+                <button class="flex items-center space-x-2">
+                    <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-100 border">
+                        <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20Vietnamese%20female%20teacher%20with%20glasses%2C%20smiling%2C%20professional%20attire%2C%20neutral%20background%2C%20high%20quality%20portrait&width=200&height=200&seq=1&orientation=squarish" alt="Avatar" class="w-full h-full object-cover">
                     </div>
-                    <button class="add-btn" onclick="showAddGradeModal()">
-                        <i class="fas fa-plus"></i>
-                        Add New Grade
-                    </button>
-                </div>
-
-                <!-- Filters Section -->
-                <div class="filters-section">
-                    <div class="filters-row">
-                        <div class="filter-group">
-                            <label class="filter-label">Search Grades</label>
-                            <input type="text" class="filter-input" placeholder="Search by student name or course...">
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">Course</label>
-                            <select class="filter-select">
-                                <option>All Courses</option>
-                                <option>Mathematics</option>
-                                <option>Physics</option>
-                                <option>Chemistry</option>
-                                <option>Biology</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">Semester</label>
-                            <select class="filter-select">
-                                <option>Current Semester</option>
-                                <option>Fall 2024</option>
-                                <option>Spring 2024</option>
-                                <option>Summer 2024</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">Grade Range</label>
-                            <select class="filter-select">
-                                <option>All Grades</option>
-                                <option>A (90-100)</option>
-                                <option>B (80-89)</option>
-                                <option>C (70-79)</option>
-                                <option>D (60-69)</option>
-                                <option>F (Below 60)</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">Sort By</label>
-                            <select class="filter-select">
-                                <option>Recent First</option>
-                                <option>Grade (High to Low)</option>
-                                <option>Grade (Low to High)</option>
-                                <option>Student Name</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">&nbsp;</label>
-                            <button class="clear-btn">Clear Filters</button>
-                        </div>
+                    <div class="hidden md:block text-left">
+                        <p class="text-sm font-medium text-gray-800">Nguyễn Thị Minh</p>
+                        <p class="text-xs text-gray-500">Giảng viên</p>
                     </div>
-                </div>
-
-                <!-- Statistics Cards -->
-                <div class="stats-section">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Class Average</span>
-                            <div class="stat-icon" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">85.2</div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-arrow-up"></i>
-                            +2.3% from last week
-                        </div>
+                    <div class="w-5 h-5 flex items-center justify-center text-gray-500">
+                        <i class="ri-arrow-down-s-line"></i>
                     </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Highest Grade</span>
-                            <div class="stat-icon" style="background: linear-gradient(45deg, #feca57, #ff9ff3);">
-                                <i class="fas fa-trophy"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">98</div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-star"></i>
-                            Excellent performance
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Lowest Grade</span>
-                            <div class="stat-icon" style="background: linear-gradient(45deg, #ff6b6b, #ffa726);">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">42</div>
-                        <div class="stat-trend trend-down">
-                            <i class="fas fa-arrow-down"></i>
-                            Needs attention
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Total Grades</span>
-                            <div class="stat-icon" style="background: linear-gradient(45deg, #a8edea, #fed6e3);">
-                                <i class="fas fa-list-alt"></i>
-                            </div>
-                        </div>
-                        <div class="stat-value">847</div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-plus"></i>
-                            12 new this week
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charts Section -->
-                <div class="charts-section">
-                    <div class="chart-card">
-                        <h3 class="chart-title">Grade Distribution</h3>
-                        <div class="chart-container">
-                            <canvas id="gradeDistributionChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-card">
-                        <h3 class="chart-title">Performance Trend</h3>
-                        <div class="chart-container">
-                            <canvas id="performanceTrendChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Data Table Section -->
-                <div class="table-section">
-                    <div class="table-header">
-                        <h3 class="table-title">Student Grades</h3>
-                        <div class="table-actions">
-                            <button class="btn-secondary">
-                                <i class="fas fa-download"></i>
-                                Export
-                            </button>
-                            <button class="btn-secondary">
-                                <i class="fas fa-print"></i>
-                                Print
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <input type="checkbox" id="selectAll">
-                                    </th>
-                                    <th>Student Name <i class="fas fa-sort"></i></th>
-                                    <th>Course <i class="fas fa-sort"></i></th>
-                                    <th>Assignment/Test <i class="fas fa-sort"></i></th>
-                                    <th>Grade <i class="fas fa-sort"></i></th>
-                                    <th>Submission Date <i class="fas fa-sort"></i></th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Alice Johnson</td>
-                                    <td>Mathematics</td>
-                                    <td>Midterm Exam</td>
-                                    <td><strong>95</strong></td>
-                                    <td>2024-05-15</td>
-                                    <td><span class="status-badge status-graded">Graded</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Bob Smith</td>
-                                    <td>Physics</td>
-                                    <td>Lab Report #3</td>
-                                    <td><strong>88</strong></td>
-                                    <td>2024-05-14</td>
-                                    <td><span class="status-badge status-graded">Graded</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Carol Davis</td>
-                                    <td>Chemistry</td>
-                                    <td>Quiz #5</td>
-                                    <td><strong>92</strong></td>
-                                    <td>2024-05-13</td>
-                                    <td><span class="status-badge status-graded">Graded</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>David Wilson</td>
-                                    <td>Biology</td>
-                                    <td>Assignment #2</td>
-                                    <td><strong>-</strong></td>
-                                    <td>2024-05-16</td>
-                                    <td><span class="status-badge status-submitted">Submitted</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Eva Martinez</td>
-                                    <td>Mathematics</td>
-                                    <td>Homework #8</td>
-                                    <td><strong>76</strong></td>
-                                    <td>2024-05-12</td>
-                                    <td><span class="status-badge status-graded">Graded</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Frank Brown</td>
-                                    <td>Physics</td>
-                                    <td>Final Project</td>
-                                    <td><strong>-</strong></td>
-                                    <td>2024-05-18</td>
-                                    <td><span class="status-badge status-pending">Pending</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Grace Lee</td>
-                                    <td>Chemistry</td>
-                                    <td>Midterm Exam</td>
-                                    <td><strong>89</strong></td>
-                                    <td>2024-05-11</td>
-                                    <td><span class="status-badge status-graded">Graded</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Henry Taylor</td>
-                                    <td>Biology</td>
-                                    <td>Lab Practical</td>
-                                    <td><strong>84</strong></td>
-                                    <td>2024-05-10</td>
-                                    <td><span class="status-badge status-graded">Graded</span></td>
-                                    <td>
-                                        <button class="action-btn" onclick="viewGradeDetails()" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="editGrade()" title="Edit Grade">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="action-btn" onclick="deleteGrade()" title="Delete Grade">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <div class="pagination">
-                        <div class="pagination-info">
-                            Showing 1-8 of 847 grades
-                        </div>
-                        <div class="pagination-controls">
-                            <select class="filter-select" style="margin-right: 20px;">
-                                <option>10 per page</option>
-                                <option>25 per page</option>
-                                <option>50 per page</option>
-                                <option>100 per page</option>
-                            </select>
-                            <button class="page-btn">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button class="page-btn active">1</button>
-                            <button class="page-btn">2</button>
-                            <button class="page-btn">3</button>
-                            <button class="page-btn">...</button>
-                            <button class="page-btn">85</button>
-                            <button class="page-btn">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                </button>
             </div>
+            <button class="md:hidden p-2 text-gray-600 hover:text-primary rounded-full">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-menu-line"></i>
+                </div>
+            </button>
         </div>
     </div>
+</header>
 
-    <!-- Add/Edit Grade Modal -->
-    <div class="modal" id="addGradeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Grade</h3>
-                <button class="close-btn" onclick="closeModal('addGradeModal')">&times;</button>
+<main class="flex-1 pt-16 pb-8 px-4 md:px-6 lg:ml-64">
+    <div class="max-w-7xl mx-auto">
+        <div class="my-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Quản lý Điểm số</h1>
+                <p class="text-sm text-gray-500 mt-1">Tổng hợp và quản lý điểm số của sinh viên.</p>
             </div>
-            
-            <form>
-                <div class="form-group">
-                    <label class="form-label">Student</label>
-                    <select class="form-input">
-                        <option>Select Student</option>
-                        <option>Alice Johnson</option>
-                        <option>Bob Smith</option>
-                        <option>Carol Davis</option>
-                        <option>David Wilson</option>
-                        <option>Eva Martinez</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Course</label>
-                    <select class="form-input"  style="background-color: #5a5e70">
-                        <option>Select Course</option>
-                        <option>Mathematics</option>
-                        <option>Physics</option>
-                        <option>Chemistry</option>
-                        <option>Biology</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Assignment/Test</label>
-                    <input type="text" class="form-input" placeholder="Enter assignment or test name">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Grade</label>
-                    <input type="number" class="form-input" placeholder="Enter grade (0-100)" min="0" max="100">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Submission Date</label>
-                    <input type="date" class="form-input">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Comments</label>
-                    <textarea class="form-input" rows="4" placeholder="Enter additional comments..."></textarea>
-                </div>
-            </form>
-            
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeModal('addGradeModal')">Cancel</button>
-                <button class="btn-primary">Save Grade</button>
+            <div class="flex flex-wrap items-center gap-3">
+                <select class="px-4 py-2 border border-gray-300 rounded-button text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="all-courses">Tất cả khóa học</option>
+                    <option value="cs401">CS401 - Lập trình web nâng cao</option>
+                    <option value="cs203">CS203 - Cơ sở dữ liệu</option>
+                    <option value="cs202">CS202 - Lập trình Java</option>
+                </select>
+                <select class="px-4 py-2 border border-gray-300 rounded-button text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="all-semesters">Tất cả học kỳ</option>
+                    <option value="hk1-2024">Học kỳ 1 (2024-2025)</option>
+                    <option value="hk2-2024">Học kỳ 2 (2024-2025)</option>
+                    <option value="hk1-2025">Học kỳ 1 (2025-2026)</option>
+                </select>
+                <button id="saveGradesBtn" class="px-4 py-2 bg-primary text-white text-sm font-medium rounded-button hover:bg-primary/90 flex items-center gap-2 hidden" title="Lưu toàn bộ điểm vừa cập nhật">
+                    <i class="ri-save-line"></i>
+                    <span>Lưu điểm</span>
+                </button>
+                <button id="bulkImportBtn" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-button hover:bg-indigo-700 flex items-center gap-2" title="Cho phép chỉnh sửa điểm và hiển thị nút lưu">
+                    <i class="ri-file-excel-line"></i>
+                    <span>Nhập điểm</span>
+                </button>
+                <button id="exportGradesBtn" class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-button hover:bg-emerald-700 flex items-center gap-2" title="Xuất bảng điểm ra file">
+                    <i class="ri-download-line"></i>
+                    <span>Xuất điểm</span>
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Grade Details Modal -->
-    <div class="modal" id="gradeDetailsModal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header">
-                <h3 class="modal-title">Grade Details</h3>
-                <button class="close-btn" onclick="closeModal('gradeDetailsModal')">&times;</button>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-x-auto mb-6">
+            <table class="min-w-full divide-y divide-gray-200 table-responsive">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên môn</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã số SV</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Họ tên</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">QT1 (20%)</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">QT2 (20%)</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Giữa kỳ (30%)</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cuối kỳ (30%)</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng kết</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                        <th scope="col" class="relative px-6 py-3">
+                            <span class="sr-only">Thao tác</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-label="Tên môn">CS203 - Cơ sở dữ liệu</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-label="Mã số SV">20210001</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" data-label="Họ tên">Trần Minh Hiếu</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="QT1 (20%)">
+                            <input type="number" step="0.1" min="0" max="10" value="9.0" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="QT2 (20%)">
+                            <input type="number" step="0.1" min="0" max="10" value="8.5" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="Giữa kỳ (30%)">
+                            <input type="number" step="0.1" min="0" max="10" value="8.8" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="Cuối kỳ (30%)">
+                            <input type="number" step="0.1" min="0" max="10" value="9.2" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900" data-label="Tổng kết">8.9</td>
+                        <td class="px-6 py-4 whitespace-nowrap" data-label="Trạng thái">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Đạt
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium actions-cell">
+                            <button class="text-primary hover:text-primary/80 grade-history-btn" title="Lịch sử chỉnh sửa điểm">
+                                <i class="ri-history-line"></i>
+                            </button>
+                            <button class="text-gray-600 hover:text-gray-900 ml-3 add-note-btn" title="Thêm ghi chú đánh giá">
+                                <i class="ri-sticky-note-line"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-label="Tên môn">CS203 - Cơ sở dữ liệu</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-label="Mã số SV">20210002</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" data-label="Họ tên">Lê Thị Thảo</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="QT1 (20%)">
+                            <input type="number" step="0.1" min="0" max="10" value="7.5" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="QT2 (20%)">
+                            <input type="number" step="0.1" min="0" max="10" value="6.8" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="Giữa kỳ (30%)">
+                            <input type="number" step="0.1" min="0" max="10" value="7.0" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="Cuối kỳ (30%)">
+                            <input type="number" step="0.1" min="0" max="10" value="6.5" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900" data-label="Tổng kết">6.9</td>
+                        <td class="px-6 py-4 whitespace-nowrap" data-label="Trạng thái">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Đạt
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium actions-cell">
+                            <button class="text-primary hover:text-primary/80 grade-history-btn" title="Lịch sử chỉnh sửa điểm">
+                                <i class="ri-history-line"></i>
+                            </button>
+                            <button class="text-gray-600 hover:text-gray-900 ml-3 add-note-btn" title="Thêm ghi chú đánh giá">
+                                <i class="ri-sticky-note-line"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-label="Tên môn">CS203 - Cơ sở dữ liệu</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" data-label="Mã số SV">20210003</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" data-label="Họ tên">Nguyễn Văn An</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="QT1 (20%)">
+                            <input type="number" step="0.1" min="0" max="10" value="4.0" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="QT2 (20%)">
+                            <input type="number" step="0.1" min="0" max="10" value="5.5" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="Giữa kỳ (30%)">
+                            <input type="number" step="0.1" min="0" max="10" value="4.8" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center" data-label="Cuối kỳ (30%)">
+                            <input type="number" step="0.1" min="0" max="10" value="4.2" class="editable-grade" readonly>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600" data-label="Tổng kết">4.6</td>
+                        <td class="px-6 py-4 whitespace-nowrap" data-label="Trạng thái">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                Không đạt
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium actions-cell">
+                            <button class="text-primary hover:text-primary/80 grade-history-btn" title="Lịch sử chỉnh sửa điểm">
+                                <i class="ri-history-line"></i>
+                            </button>
+                            <button class="text-gray-600 hover:text-gray-900 ml-3 add-note-btn" title="Thêm ghi chú đánh giá">
+                                <i class="ri-sticky-note-line"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="empty-state" class="hidden">
+                        <td colspan="10" class="px-6 py-10 text-center text-gray-500">
+                            <i class="ri-file-chart-line text-5xl mb-3 text-gray-400"></i>
+                            <p class="text-lg font-medium mb-2">Không có dữ liệu điểm số nào được tìm thấy.</p>
+                            <p class="text-sm">Vui lòng chọn khóa học/học kỳ khác hoặc nhập điểm mới.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-5 mb-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Biểu đồ phân tích điểm</h3>
+            <div class="h-64 flex items-center justify-center bg-gray-50 rounded-md border border-gray-200 text-gray-500">
+                <p>Nơi hiển thị biểu đồ phân phối điểm (Histogram) và thống kê A, B, C, D, F, điểm trung bình...</p>
             </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                <div>
-                    <strong>Student:</strong> Alice Johnson<br>
-                    <strong>Course:</strong> Mathematics<br>
-                    <strong>Assignment:</strong> Midterm Exam<br>
-                    <strong>Grade:</strong> 95/100
-                </div>
-                <div>
-                    <strong>Submission Date:</strong> May 15, 2024<br>
-                    <strong>Graded Date:</strong> May 16, 2024<br>
-                    <strong>Status:</strong> <span class="status-badge status-graded">Graded</span>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Teacher Comments</label>
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 12px;">
-                    Excellent work! Shows strong understanding of algebraic concepts. Minor arithmetic error in question 7, but overall exceptional performance.
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Performance History</label>
-                <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 12px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Quiz #1</span>
-                        <span><strong>92</strong></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Homework #1-5</span>
-                        <span><strong>88</strong></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Midterm Exam</span>
-                        <span><strong>95</strong></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeModal('gradeDetailsModal')">Close</button>
-                <button class="btn-primary">Edit Grade</button>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm text-gray-700">
+                <div><strong>Điểm trung bình lớp:</strong> 7.8</div>
+                <div><strong>Tỷ lệ đạt:</strong> 85%</div>
+                <div><strong>Sinh viên cần quan tâm:</strong> 3</div>
             </div>
         </div>
+
     </div>
+</main>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal" id="deleteModal">
-        <div class="modal-content" style="max-width: 400px;">
-            <div class="modal-header">
-                <h3 class="modal-title">Confirm Delete</h3>
-                <button class="close-btn" onclick="closeModal('deleteModal')">&times;</button>
-            </div>
-            
-            <p style="margin-bottom: 20px;">Are you sure you want to delete this grade? This action cannot be undone.</p>
-            
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
-                <button class="btn-primary" style="background: linear-gradient(45deg, #ff6b6b, #ff8e8e);">Delete</button>
-            </div>
-        </div>
-    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle (from previous pages)
+        const mobileMenuButton = document.querySelector('header .lg\\:hidden button');
+        const sidebar = document.querySelector('aside');
 
-    <script>
-        // Global variables for charts
-        let gradeDistributionChart;
-        let performanceTrendChart;
-
-        // Initialize charts when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeCharts();
-            setupEventListeners();
-        });
-
-        // Toggle sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-btn i');
-            
-            sidebar.classList.toggle('collapsed');
-            
-            if (sidebar.classList.contains('collapsed')) {
-                toggleBtn.className = 'fas fa-chevron-right';
-            } else {
-                toggleBtn.className = 'fas fa-chevron-left';
-            }
+        if (mobileMenuButton && sidebar) {
+            mobileMenuButton.addEventListener('click', function() {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('flex');
+            });
         }
 
-        // Initialize charts
-        function initializeCharts() {
-            // Grade Distribution Chart
-            const gradeDistCtx = document.getElementById('gradeDistributionChart').getContext('2d');
-            gradeDistributionChart = new Chart(gradeDistCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['A (90-100)', 'B (80-89)', 'C (70-79)', 'D (60-69)', 'F (0-59)'],
-                    datasets: [{
-                        data: [245, 312, 156, 89, 45],
-                        backgroundColor: [
-                            'rgba(78, 205, 196, 0.8)',
-                            'rgba(254, 202, 87, 0.8)',
-                            'rgba(255, 154, 162, 0.8)',
-                            'rgba(255, 183, 77, 0.8)',
-                            'rgba(255, 107, 107, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(78, 205, 196, 1)',
-                            'rgba(254, 202, 87, 1)',
-                            'rgba(255, 154, 162, 1)',
-                            'rgba(255, 183, 77, 1)',
-                            'rgba(255, 107, 107, 1)'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: 'rgba(255, 255, 255, 0.8)',
-                                padding: 20,
-                                usePointStyle: true
-                            }
-                        }
+        // Action buttons
+        const saveGradesBtn = document.getElementById('saveGradesBtn'); // New button
+        const bulkImportBtn = document.getElementById('bulkImportBtn'); // Renamed to act as "Enable Editing"
+        const exportGradesBtn = document.getElementById('exportGradesBtn');
+        const notifyStudentsBtn = document.getElementById('notifyStudentsBtn'); // Note: This button does not exist in the provided HTML.
+        const editableGrades = document.querySelectorAll('.editable-grade');
+        const gradeHistoryBtns = document.querySelectorAll('.grade-history-btn');
+        const addNoteBtns = document.querySelectorAll('.add-note-btn');
+
+        // Function to export table to CSV
+        function exportTableToCSV(filename) {
+            const table = document.querySelector('.table-responsive');
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const row = [], cols = rows[i].querySelectorAll('td, th');
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ').trim();
+                    data = data.replace(/"/g, '""'); // Escape double quotes
+                    // If the cell contains an input, use its value
+                    const inputElement = cols[j].querySelector('input[type="number"]');
+                    if (inputElement) {
+                        data = inputElement.value;
                     }
+                    row.push('"' + data + '"');
                 }
-            });
-
-            // Performance Trend Chart
-            const perfTrendCtx = document.getElementById('performanceTrendChart').getContext('2d');
-            performanceTrendChart = new Chart(perfTrendCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
-                    datasets: [{
-                        label: 'Class Average',
-                        data: [82, 84, 83, 85, 87, 86, 88, 85],
-                        borderColor: 'rgba(78, 205, 196, 1)',
-                        backgroundColor: 'rgba(78, 205, 196, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: 'rgba(78, 205, 196, 1)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.8)'
-                            }
-                        },
-                        y: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.8)'
-                            },
-                            min: 70,
-                            max: 95
-                        }
-                    }
-                }
-            });
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Select all checkbox functionality
-            document.getElementById('selectAll').addEventListener('change', function() {
-                const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-            });
-
-            // Mobile sidebar toggle
-            if (window.innerWidth <= 768) {
-                document.addEventListener('click', function(e) {
-                    const sidebar = document.getElementById('sidebar');
-                    if (!sidebar.contains(e.target) && !e.target.closest('.toggle-btn')) {
-                        sidebar.classList.remove('show');
-                    }
-                });
+                csv.push(row.join(','));
             }
+
+            const csvString = csv.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', filename);
+            document.body.appendChild(link); // Required for Firefox
+            link.click();
+            document.body.removeChild(link); // Clean up
         }
 
-        // Modal functions
-        function showAddGradeModal() {
-            document.getElementById('addGradeModal').classList.add('show');
-            document.querySelector('#addGradeModal .modal-title').textContent = 'Add New Grade';
+
+        if (exportGradesBtn) {
+            exportGradesBtn.addEventListener('click', function() {
+                exportTableToCSV('bang_diem_LMS.csv');
+                console.log('Xuất điểm clicked - CSV download initiated');
+            });
         }
 
-        function editGrade() {
-            document.getElementById('addGradeModal').classList.add('show');
-            document.querySelector('#addGradeModal .modal-title').textContent = 'Edit Grade';
-            
-            // Pre-fill form with existing data (example)
-            // In a real application, you would fetch this data from your backend
+        if (bulkImportBtn) {
+            bulkImportBtn.addEventListener('click', function() {
+                // Hide "Nhập điểm" button
+                bulkImportBtn.classList.add('hidden');
+                // Show "Lưu điểm" button
+                saveGradesBtn.classList.remove('hidden');
+
+                // Enable editing for all grade inputs
+                editableGrades.forEach(input => {
+                    input.readOnly = false;
+                });
+                alert('Chế độ chỉnh sửa điểm đã được bật. Vui lòng chỉnh sửa và nhấn "Lưu điểm"!');
+                console.log('Chế độ chỉnh sửa điểm đã được bật.');
+            });
         }
 
-        function viewGradeDetails() {
-            document.getElementById('gradeDetailsModal').classList.add('show');
+        if (saveGradesBtn) {
+            saveGradesBtn.addEventListener('click', function() {
+                alert('Điểm đã được lưu thành công! (Đây là demo, không lưu thực tế)'); // Placeholder for actual save logic
+                console.log('Lưu điểm clicked');
+
+                // After saving, revert to read-only mode and switch buttons back
+                editableGrades.forEach(input => {
+                    input.readOnly = true;
+                });
+                saveGradesBtn.classList.add('hidden');
+                bulkImportBtn.classList.remove('hidden');
+            });
         }
 
-        function deleteGrade() {
-            document.getElementById('deleteModal').classList.add('show');
-        }
+        // Removed individual input change listener as per the new bulk save flow
+        // editableGrades.forEach(input => {
+        //     input.addEventListener('change', function() {
+        //         const studentId = this.closest('tr').querySelector('[data-label="Mã số SV"]').textContent;
+        //         const scoreType = this.closest('td').getAttribute('data-label');
+        //         const newScore = this.value;
+        //         alert(`Lưu điểm mới: Sinh viên ${studentId}, ${scoreType}: ${newScore}! (Đây là demo, không lưu thực tế)`);
+        //         console.log(`Điểm của sinh viên ${studentId} cho ${scoreType} đã thay đổi thành ${newScore}`);
+        //         // In a real application, you would send an AJAX request to update the database
+        //     });
+        // });
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        function toggleUserMenu() {
-            // User menu toggle functionality
-            // In a real application, this would show/hide a dropdown menu
-            alert('User menu functionality would be implemented here');
-        }
-
-        // Close modals when clicking outside
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.remove('show');
-            }
+        gradeHistoryBtns.forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.closest('tr').querySelector('[data-label="Mã số SV"]').textContent;
+                alert(`Mở cửa sổ lịch sử chỉnh sửa điểm của sinh viên ${studentId}!`); // Placeholder for actual history display
+                console.log(`Lịch sử chỉnh sửa điểm của ${studentId} clicked`);
+            });
         });
 
-        // Handle window resize for responsive design
-        window.addEventListener('resize', function() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('collapsed');
-                sidebar.classList.remove('show');
-            } else {
-                sidebar.classList.remove('show');
-            }
+        addNoteBtns.forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.closest('tr').querySelector('[data-label="Mã số SV"]').textContent;
+                alert(`Mở form/modal ghi chú đánh giá cho sinh viên ${studentId}!`); // Placeholder for actual form/modal
+                console.log(`Thêm ghi chú đánh giá cho ${studentId} clicked`);
+            });
         });
 
-        // Add mobile sidebar toggle for small screens
-        if (window.innerWidth <= 768) {
-            const mobileToggle = document.createElement('button');
-            mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            mobileToggle.className = 'mobile-toggle';
-            mobileToggle.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                z-index: 1001;
-                background: rgba(255, 255, 255, 0.2);
-                border: none;
-                border-radius: 8px;
-                color: white;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            `;
-            
-            mobileToggle.addEventListener('click', function() {
-                document.getElementById('sidebar').classList.toggle('show');
-            });
-            
-            document.body.appendChild(mobileToggle);
-        }
-    </script>
+        // Example for "empty state" display
+        // You would typically toggle this based on your data fetching results
+        // const emptyStateRow = document.getElementById('empty-state');
+        // if (someConditionForNoGrades) { // Replace 'someConditionForNoGrades' with actual logic
+        //    emptyStateRow.classList.remove('hidden');
+        // } else {
+        //    emptyStateRow.classList.add('hidden');
+        // }
+    });
+</script>
+
 </body>
 </html>
-                        
