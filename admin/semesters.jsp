@@ -133,78 +133,123 @@
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
-<aside class="w-64 h-full bg-white shadow-md flex-shrink-0 flex flex-col z-10">
-    <div class="p-4 border-b flex items-center">
-        <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
-        <span class="ml-2 font-semibold text-gray-800">EduLearn</span>
-    </div>
-    <div class="p-4">
-        <div class="flex items-center space-x-3 mb-6">
-            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-                <span class="font-medium">JD</span>
+    <!-- Sidebar -->
+    <aside class="w-64 h-full bg-white shadow-md flex-shrink-0 flex flex-col z-10">
+        <div class="p-4 border-b flex items-center">
+            <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
+            <span class="ml-2 font-semibold text-gray-800">EduLearn</span>
+        </div>
+        
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+                    <span class="font-medium">JD</span>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-800">John Doe</h3>
+                    <p class="text-xs text-gray-500">Admin</p>
+                </div>
             </div>
-            <div>
-                <h3 class="font-medium text-gray-800">John Doe</h3>
-                <p class="text-xs text-gray-500">Admin</p>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto custom-scrollbar">
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Main</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="dashboard.html" class="sidebar-link  flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-dashboard-line"></i>
+                        </div>
+                        Trang Chủ
+                    </a>
+                    <a href="users.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-user-line"></i>
+                        </div>
+                        Người Dùng
+                    </a>
+                    <a href="coursers.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-book-open-line"></i>
+                        </div>
+                        Môn Học
+                    </a>
+                </div>
             </div>
-        </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto custom-scrollbar">
-        <div class="px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Main</p>
-            <a href="dashboard.html" class="sidebar-link active flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-dashboard-line mr-2"></i> Dashboard
-            </a>
-            <a href="users.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-user-line mr-2"></i> Users
-            </a>
-            <a href="coursers.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-book-open-line mr-2"></i> Courses
-            </a>
-        </div>
-        <div class="mt-6 px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Academic</p>
-            <a href="semesters.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-calendar-line mr-2"></i> Semesters
-            </a>
-            <a href="assignments.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-file-list-line mr-2"></i> Assignments
-            </a>
-            <a href="grades.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-bar-chart-line mr-2"></i> Grades
-            </a>
-        </div>
-        <div class="mt-6 px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Communication</p>
-            <a href="messages.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-message-2-line mr-2"></i> Messages
-            </a>
-            <a href="forums.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-discuss-line mr-2"></i> Forums
-            </a>
-            <a href="announcements.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-notification-3-line mr-2"></i> Announcements
-            </a>
-        </div>
-        <div class="mt-6 px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">System</p>
-            <a href="settings.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-settings-3-line mr-2"></i> Settings
-            </a>
-            <a href="helpcenter.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-question-line mr-2"></i> Help Center
-            </a>
-        </div>
-    </nav>
-    <div class="p-4 border-t">
-        <a href="/WebApplication1" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-button hover:bg-gray-200 whitespace-nowrap" style="text-decoration:none;">
-            <div class="w-5 h-5 mr-2 flex items-center justify-center">
-                <i class="ri-logout-box-line"></i>
+            
+            <div class="px-4 py-2 mt-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Academic</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="semesters.jsp" class="sidebar-link active flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-calendar-line"></i>
+                        </div>
+                        Học Kỳ
+                    </a>
+
+                    <a href="assignments.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-file-list-line"></i>
+                        </div>
+                        Bài Kiểm Tra
+                    </a>
+                    <a href="grades.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-bar-chart-line"></i>
+                        </div>
+                        Điểm
+                    </a>
+                </div>
             </div>
-            Sign Out
-        </a>
-    </div>
-</aside>
+            
+            <div class="px-4 py-2 mt-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Communication</h3>
+                <div class="mt-2 space-y-1">
+
+                    <a href="forums.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-discuss-line"></i>
+                        </div>
+                        Diễn Đàn
+                    </a>
+                    <a href="announcements.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-notification-3-line"></i>
+                        </div>
+                        Thông báo
+                    </a>
+                </div>
+            </div>
+            
+            <div class="px-4 py-2 mt-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">System</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="settings.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-settings-line"></i>
+                        </div>
+                        Cài Đặt
+                    </a>
+                    <a href="helpcenter.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-question-line"></i>
+                        </div>
+                        Hướng Dẫn
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+       <div class="p-4 border-t">
+    <a href="/LMSS" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-button hover:bg-gray-200 whitespace-nowrap" style="text-decoration:none;">
+        <div class="w-5 h-5 mr-2 flex items-center justify-center">
+            <i class="ri-logout-box-line"></i>
+        </div>
+        Đăng Xuất
+    </a>
+</div>
+
+    </aside>
 <div class="flex-1 flex flex-col">
     <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center border-b">
         <div class="flex items-center w-1/2">

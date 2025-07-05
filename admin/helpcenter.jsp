@@ -132,78 +132,123 @@
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
-<aside class="w-64 h-full bg-white shadow-md flex-shrink-0 flex flex-col z-10">
-    <div class="p-4 border-b flex items-center">
-        <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
-        <span class="ml-2 font-semibold text-gray-800">EduLearn</span>
-    </div>
-    <div class="p-4">
-        <div class="flex items-center space-x-3 mb-6">
-            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-                <span class="font-medium">JD</span>
+    <!-- Sidebar -->
+    <aside class="w-64 h-full bg-white shadow-md flex-shrink-0 flex flex-col z-10">
+        <div class="p-4 border-b flex items-center">
+            <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
+            <span class="ml-2 font-semibold text-gray-800">EduLearn</span>
+        </div>
+        
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+                    <span class="font-medium">JD</span>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-800">John Doe</h3>
+                    <p class="text-xs text-gray-500">Admin</p>
+                </div>
             </div>
-            <div>
-                <h3 class="font-medium text-gray-800">John Doe</h3>
-                <p class="text-xs text-gray-500">Admin</p>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto custom-scrollbar">
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Main</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="dashboard.html" class="sidebar-link  flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-dashboard-line"></i>
+                        </div>
+                        Trang Chủ
+                    </a>
+                    <a href="users.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-user-line"></i>
+                        </div>
+                        Người Dùng
+                    </a>
+                    <a href="coursers.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-book-open-line"></i>
+                        </div>
+                        Môn Học
+                    </a>
+                </div>
             </div>
-        </div>
-    </div>
-    <nav class="flex-1 overflow-y-auto custom-scrollbar">
-        <div class="px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Main</p>
-            <a href="dashboard.jsp" class="sidebar-link active flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-dashboard-line mr-2"></i> Dashboard
-            </a>
-            <a href="users.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-user-line mr-2"></i> Users
-            </a>
-            <a href="coursers.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-book-open-line mr-2"></i> Courses
-            </a>
-        </div>
-        <div class="mt-6 px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Academic</p>
-            <a href="semesters.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-calendar-line mr-2"></i> Semesters
-            </a>
-            <a href="assignments.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-file-list-line mr-2"></i> Assignments
-            </a>
-            <a href="grades.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-bar-chart-line mr-2"></i> Grades
-            </a>
-        </div>
-        <div class="mt-6 px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">Communication</p>
-            <a href="messages.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-message-2-line mr-2"></i> Messages
-            </a>
-            <a href="forums.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-discuss-line mr-2"></i> Forums
-            </a>
-            <a href="announcements.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-notification-3-line mr-2"></i> Announcements
-            </a>
-        </div>
-        <div class="mt-6 px-4 space-y-1">
-            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide">System</p>
-            <a href="settings.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-settings-3-line mr-2"></i> Settings
-            </a>
-            <a href="helpcenter.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <i class="ri-question-line mr-2"></i> Help Center
-            </a>
-        </div>
-    </nav>
-    <div class="p-4 border-t">
-        <a href="/WebApplication1" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-button hover:bg-gray-200 whitespace-nowrap" style="text-decoration:none;">
-            <div class="w-5 h-5 mr-2 flex items-center justify-center">
-                <i class="ri-logout-box-line"></i>
+            
+            <div class="px-4 py-2 mt-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Academic</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="semesters.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-calendar-line"></i>
+                        </div>
+                        Học Kỳ
+                    </a>
+
+                    <a href="assignments.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-file-list-line"></i>
+                        </div>
+                        Bài Kiểm Tra
+                    </a>
+                    <a href="grades.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-bar-chart-line"></i>
+                        </div>
+                        Điểm
+                    </a>
+                </div>
             </div>
-            Sign Out
-        </a>
-    </div>
-</aside>
+            
+            <div class="px-4 py-2 mt-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Communication</h3>
+                <div class="mt-2 space-y-1">
+
+                    <a href="forums.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-discuss-line"></i>
+                        </div>
+                        Diễn Đàn
+                    </a>
+                    <a href="announcements.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-notification-3-line"></i>
+                        </div>
+                        Thông báo
+                    </a>
+                </div>
+            </div>
+            
+            <div class="px-4 py-2 mt-2">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">System</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="settings.jsp" class="sidebar-link flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-settings-line"></i>
+                        </div>
+                        Cài Đặt
+                    </a>
+                    <a href="helpcenter.jsp" class="sidebar-link active flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50">
+                        <div class="w-5 h-5 mr-3 flex items-center justify-center">
+                            <i class="ri-question-line"></i>
+                        </div>
+                        Hướng Dẫn
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+       <div class="p-4 border-t">
+    <a href="/LMSS" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-button hover:bg-gray-200 whitespace-nowrap" style="text-decoration:none;">
+        <div class="w-5 h-5 mr-2 flex items-center justify-center">
+            <i class="ri-logout-box-line"></i>
+        </div>
+        Đăng Xuất
+    </a>
+</div>
+
+    </aside>
 <div class="flex-1 flex flex-col">
     <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center border-b">
         <div class="flex items-center w-1/2">
@@ -225,98 +270,129 @@
         </div>
     </header>
     
-    <main class="flex-1 p-8 overflow-auto">
         <!-- PAGE-SPECIFIC CONTENT GOES HERE -->
-        <body class="bg-gray-50 font-sans">
-<header class="bg-white px-8 py-6 shadow-sm flex items-center justify-between">
-    <div>
-        <h1 class="text-2xl font-bold">Help Center</h1>
-        <nav class="text-sm text-gray-500">Dashboard > Help Center</nav>
-    </div>
-    <a href="dashboard.html" class="text-sm text-blue-600 hover:underline">← Back to Dashboard</a>
-</header>
+<main class="flex-1 p-8 overflow-auto">
+    <header class="bg-white px-8 py-6 shadow-sm flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold">Help Center</h1>
+            <nav class="text-sm text-gray-500">Dashboard > Help Center</nav>
+        </div>
+        <a href="dashboard.html" class="text-sm text-blue-600 hover:underline">← Back to Dashboard</a>
+    </header>
 
-<div class="p-8">
-    <!-- Search bar -->
-    <div class="mb-8">
-        <input type="text" placeholder="Search help articles..." class="w-full border border-gray-300 px-4 py-3 rounded-lg shadow-sm text-sm" />
-    </div>
-
-    <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Left Column -->
-        <div class="lg:w-2/3 w-full space-y-12">
-            <!-- Popular Help Topics -->
-            <section>
-                <h2 class="text-lg font-semibold mb-4">Popular Help Topics</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-4 border rounded shadow hover:shadow-md transition cursor-pointer">
-                        <i class="ri-user-line text-xl text-primary"></i>
-                        <h3 class="font-semibold mt-2">Account Issues</h3>
-                        <p class="text-sm text-gray-600">Manage your account info and security</p>
-                        <p class="text-xs text-gray-400 mt-1">12 articles</p>
-                    </div>
-                    <div class="p-4 border rounded shadow hover:shadow-md transition cursor-pointer">
-                        <i class="ri-book-open-line text-xl text-primary"></i>
-                        <h3 class="font-semibold mt-2">Courses</h3>
-                        <p class="text-sm text-gray-600">Find help on taking or creating courses</p>
-                        <p class="text-xs text-gray-400 mt-1">18 articles</p>
-                    </div>
-                    <div class="p-4 border rounded shadow hover:shadow-md transition cursor-pointer">
-                        <i class="ri-settings-3-line text-xl text-primary"></i>
-                        <h3 class="font-semibold mt-2">System Settings</h3>
-                        <p class="text-sm text-gray-600">Customize and control system preferences</p>
-                        <p class="text-xs text-gray-400 mt-1">8 articles</p>
-                    </div>
-                    <div class="p-4 border rounded shadow hover:shadow-md transition cursor-pointer">
-                        <i class="ri-message-2-line text-xl text-primary"></i>
-                        <h3 class="font-semibold mt-2">Communication</h3>
-                        <p class="text-sm text-gray-600">Manage announcements, forums and more</p>
-                        <p class="text-xs text-gray-400 mt-1">10 articles</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Documentation Browser -->
-            <section>
-                <h2 class="text-lg font-semibold mb-4">Browse Documentation</h2>
-                <ul class="space-y-4">
-                    <li class="border-b pb-4">
-                        <h3 class="text-base font-medium text-primary">How to reset your password</h3>
-                        <p class="text-xs text-gray-500">Updated 2 days ago • 3 min read • 842 views</p>
-                    </li>
-                    <li class="border-b pb-4">
-                        <h3 class="text-base font-medium text-primary">Setting up your course page</h3>
-                        <p class="text-xs text-gray-500">Updated 5 days ago • 5 min read • 632 views</p>
-                    </li>
-                    <li class="border-b pb-4">
-                        <h3 class="text-base font-medium text-primary">Managing notifications and alerts</h3>
-                        <p class="text-xs text-gray-500">Updated 1 week ago • 4 min read • 509 views</p>
-                    </li>
-                </ul>
-            </section>
+    <div class="p-8">
+        <div class="mb-8">
+            <input type="text" placeholder="Search help articles..." class="w-full border border-gray-300 px-4 py-3 rounded-lg shadow-sm text-sm" />
         </div>
 
-        <!-- Right Sidebar -->
-        <aside class="lg:w-1/3 w-full space-y-6">
-            <div class="p-6 bg-white rounded shadow">
-                <h3 class="font-semibold mb-3">Quick Actions</h3>
-                <button class="block w-full bg-primary text-white px-4 py-2 rounded mb-2">Submit Support Ticket</button>
-                <button class="block w-full bg-secondary text-white px-4 py-2 rounded mb-2">Contact Support</button>
-                <button class="block w-full bg-gray-200 text-gray-800 px-4 py-2 rounded">Schedule Training</button>
-            </div>
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="lg:w-2/3 w-full space-y-12">
 
-            <div class="p-6 bg-white rounded shadow">
-                <h3 class="font-semibold mb-3">Need More Help?</h3>
-                <ul class="text-sm space-y-2">
-                    <li><a href="#" class="text-blue-600 hover:underline">📺 Watch video tutorials</a></li>
-                    <li><a href="#" class="text-blue-600 hover:underline">💬 Chat with support</a></li>
-                    <li><a href="#" class="text-blue-600 hover:underline">❓ View FAQs</a></li>
-                    <li><a href="#" class="text-blue-600 hover:underline">🌐 Join the community forum</a></li>
-                </ul>
-            </div>
-        </aside>
+                <section id="documentation-browser">
+                    <h2 class="text-lg font-semibold mb-4">Browse Documentation</h2>
+                    <ul class="space-y-4">
+                        <li class="border-b pb-4">
+                            <h3 class="text-base font-medium text-primary cursor-pointer article-link" data-article-id="reset-password">How to reset your password</h3>
+                            <p class="text-xs text-gray-500">Updated 2 days ago • 3 min read • 842 views</p>
+                        </li>
+                        <li class="border-b pb-4">
+                            <h3 class="text-base font-medium text-primary cursor-pointer article-link" data-article-id="course-setup">Setting up your course page</h3>
+                            <p class="text-xs text-gray-500">Updated 5 days ago • 5 min read • 632 views</p>
+                        </li>
+                        <li class="border-b pb-4">
+                            <h3 class="text-base font-medium text-primary cursor-pointer article-link" data-article-id="manage-notifications">Managing notifications and alerts</h3>
+                            <p class="text-xs text-gray-500">Updated 1 week ago • 4 min read • 509 views</p>
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="article-content" class="hidden bg-white p-6 rounded shadow">
+                    <button id="back-to-docs" class="text-sm text-blue-600 hover:underline mb-4">← Back to Documentation</button>
+                    <h2 id="article-title" class="text-xl font-bold mb-4"></h2>
+                    <div id="article-body" class="prose max-w-none">
+                        </div>
+                </section>
+            </div>  
+        </div>
     </div>
-    </main>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const articleLinks = document.querySelectorAll('.article-link');
+        const documentationBrowser = document.getElementById('documentation-browser');
+        const articleContentSection = document.getElementById('article-content');
+        const articleTitle = document.getElementById('article-title');
+        const articleBody = document.getElementById('article-body');
+        const backToDocsButton = document.getElementById('back-to-docs');
+
+        const articles = {
+            'reset-password': {
+                title: 'How to reset your password',
+                body: `
+                    <p>To reset your password, please follow these steps:</p>
+                    <ol>
+                        <li>Go to the login page.</li>
+                        <li>Click on the "Forgot Password" link.</li>
+                        <li>Enter your registered email address.</li>
+                        <li>You will receive a password reset link in your email.</li>
+                        <li>Click on the link and follow the instructions to set a new password.</li>
+                    </ol>
+                    <p>If you encounter any issues, please contact support.</p>
+                `
+            },
+            'course-setup': {
+                title: 'Setting up your course page',
+                body: `
+                    <p>Setting up your course page involves several key steps:</p>
+                    <ol>
+                        <li>Log in to your instructor account.</li>
+                        <li>Navigate to the "Courses" section from the sidebar.</li>
+                        <li>Click on "Create New Course" or select an existing course to edit.</li>
+                        <li>Fill in all required details, including course title, description, and syllabus.</li>
+                        <li>Upload course materials such as lectures, readings, and assignments.</li>
+                        <li>Set visibility and access permissions for your students.</li>
+                        <li>Publish your course to make it available to students.</li>
+                    </ol>
+                    <p>Remember to regularly update your course content to keep it current.</p>
+                `
+            },
+            'manage-notifications': {
+                title: 'Managing notifications and alerts',
+                body: `
+                    <p>You can customize your notification settings to receive alerts that matter most to you:</p>
+                    <ol>
+                        <li>Go to "Settings" from your profile dropdown.</li>
+                        <li>Select "Notifications" from the settings menu.</li>
+                        <li>Toggle specific notification types on or off (e.g., new messages, assignment deadlines, forum replies).</li>
+                        <li>Choose your preferred notification method (email, in-app, or both).</li>
+                        <li>Save your changes.</li>
+                    </ol>
+                    <p>Review your settings periodically to ensure they meet your current needs.</p>
+                `
+            }
+        };
+
+        articleLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                const articleId = this.dataset.articleId;
+                const article = articles[articleId];
+
+                if (article) {
+                    articleTitle.textContent = article.title;
+                    articleBody.innerHTML = article.body;
+                    documentationBrowser.classList.add('hidden');
+                    articleContentSection.classList.remove('hidden');
+                }
+            });
+        });
+
+        backToDocsButton.addEventListener('click', function () {
+            articleContentSection.classList.add('hidden');
+            documentationBrowser.classList.remove('hidden');
+        });
+    });
+</script>
 </div>
 </body>
 </html>
