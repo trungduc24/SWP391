@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hệ thống Quản lý Học tập - Sinh viên</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#4f46e5',secondary:'#818cf8'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f9fafb;
+}
+.custom-scrollbar::-webkit-scrollbar {
+width: 6px;
+height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #f1f1f1;
+border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #d1d5db;
+border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+background: #9ca3af;
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 44px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.switch-slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #e5e7eb;
+transition: .4s;
+border-radius: 24px;
+}
+.switch-slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .switch-slider {
+background-color: #4f46e5;
+}
+input:checked + .switch-slider:before {
+transform: translateX(20px);
+}
+.custom-checkbox {
+position: relative;
+display: inline-block;
+width: 18px;
+height: 18px;
+}
+.custom-checkbox input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.checkbox-mark {
+position: absolute;
+top: 0;
+left: 0;
+height: 18px;
+width: 18px;
+background-color: #fff;
+border: 2px solid #d1d5db;
+border-radius: 4px;
+transition: all 0.2s ease;
+}
+.custom-checkbox input:checked ~ .checkbox-mark {
+background-color: #4f46e5;
+border-color: #4f46e5;
+}
+.checkbox-mark:after {
+content: "";
+position: absolute;
+display: none;
+}
+.custom-checkbox input:checked ~ .checkbox-mark:after {
+display: block;
+}
+.custom-checkbox .checkbox-mark:after {
+left: 5px;
+top: 2px;
+width: 6px;
+height: 10px;
+border: solid white;
+border-width: 0 2px 2px 0;
+transform: rotate(45deg);
+}
+.course-progress::-webkit-progress-bar {
+background-color: #e5e7eb;
+border-radius: 9999px;
+}
+.course-progress::-webkit-progress-value {
+background-color: #4f46e5;
+border-radius: 9999px;
+}
+.course-progress::-moz-progress-bar {
+background-color: #4f46e5;
+border-radius: 9999px;
+}
+</style>
+</head>
+<body>
+<div class="min-h-screen flex">
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm">
+<div class="p-4 border-b border-gray-200 flex items-center">
+<span class="text-2xl font-['Pacifico'] text-primary">logo</span>
+<span class="ml-2 text-lg font-semibold text-gray-800">LMS</span>
+</div>
+<nav class="flex-1 pt-4 pb-4 overflow-y-auto custom-scrollbar">
+<ul>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-primary font-medium">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-dashboard-line"></i>
+</div>
+<span>Trang chủ</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-book-open-line"></i>
+</div>
+<span>Khóa học của tôi</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-calendar-line"></i>
+</div>
+<span>Lịch học</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-file-list-3-line"></i>
+</div>
+<span>Bài tập/Kiểm tra</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-bar-chart-line"></i>
+</div>
+<span>Điểm số</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="https://readdy.ai/home/44822aa2-ec31-40dc-a6fd-6e72476f29bf/fcae1fd5-68ab-411d-b4b0-59fa0cf12d8c" data-readdy="true" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-discuss-line"></i>
+</div>
+<span>Diễn đàn</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-file-paper-2-line"></i>
+</div>
+<span>Tài liệu</span>
+</a>
+</li>
+<li class="px-4 py-2">
+<a href="#" class="flex items-center text-gray-600 hover:text-primary">
+<div class="w-6 h-6 flex items-center justify-center mr-3">
+<i class="ri-settings-3-line"></i>
+</div>
+<span>Cài đặt</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="p-4 border-t border-gray-200">
+<div class="flex items-center">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20vietnamese%20male%20student%20with%20short%20black%20hair%2C%20casual%20outfit%2C%20neutral%20background%2C%20friendly%20smile&width=100&height=100&seq=1&orientation=squarish" alt="Avatar" class="w-10 h-10 rounded-full object-cover">
+<div class="ml-3">
+<p class="text-sm font-medium text-gray-800">Nguyễn Văn Minh</p>
+<p class="text-xs text-gray-500">SV2023405</p>
+</div>
+</div>
+<button class="mt-3 w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-primary !rounded-button">
+<div class="w-4 h-4 flex items-center justify-center">
+<i class="ri-logout-box-line"></i>
+<div>
+  <a href="/LMSS/login.jsp" style="text-decoration:none; color:inherit;">
+    <button type="button">
+      <span class="whitespace-nowrap">Đăng xuất</span>
+    </button>
+  </a>
+</div>
+</aside>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col">
+<!-- Top Navigation -->
+<header class="bg-white border-b border-gray-200 shadow-sm">
+<div class="flex items-center justify-between px-4 py-3">
+<!-- Mobile Menu Button -->
+<button class="md:hidden w-10 h-10 flex items-center justify-center text-gray-600">
+<i class="ri-menu-line text-xl"></i>
+</button>
+<!-- Logo for Mobile -->
+<div class="md:hidden flex items-center">
+<span class="text-xl font-['Pacifico'] text-primary">logo</span>
+<span class="ml-1 text-base font-semibold text-gray-800">LMS</span>
+</div>
+<!-- Search Bar -->
+<div class="hidden md:flex items-center flex-1 max-w-lg mx-4">
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<i class="ri-search-line text-gray-400"></i>
+</div>
+<input type="text" class="bg-gray-50 border-none text-gray-900 text-sm rounded-lg block w-full pl-10 p-2.5 focus:ring-2 focus:ring-primary/20 focus:outline-none" placeholder="Tìm kiếm khóa học, tài liệu...">
+</div>
+</div>
+<!-- Right Navigation Items -->
+<div class="flex items-center space-x-4">
+<!-- Notifications -->
+<div class="relative">
+<button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full">
+<i class="ri-notification-3-line"></i>
+</button>
+<span class="absolute top-1 right-1 w-5 h-5 flex items-center justify-center bg-red-500 text-white text-xs rounded-full">3</span>
+</div>
+<!-- Messages -->
+<button class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary hover:bg-gray-100 rounded-full">
+<i class="ri-message-3-line"></i>
+</button>
+<!-- User Menu (Mobile) -->
+<div class="md:hidden">
+<button class="w-10 h-10 flex items-center justify-center">
+<img src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20a%20young%20vietnamese%20male%20student%20with%20short%20black%20hair%2C%20casual%20outfit%2C%20neutral%20background%2C%20friendly%20smile&width=100&height=100&seq=1&orientation=squarish" alt="Avatar" class="w-8 h-8 rounded-full object-cover">
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-6 custom-scrollbar">
+<div class="max-w-7xl mx-auto">
+<!-- Welcome Section -->
+<div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+<div class="p-6 flex flex-col md:flex-row items-center justify-between">
+<div class="mb-4 md:mb-0">
+<h1 class="text-2xl font-bold text-gray-800">Xin chào, Nguyễn Văn Minh!</h1>
+<p class="text-gray-600 mt-1">Hôm nay là Chủ nhật, 25 tháng 5, 2025</p>
+</div>
+<div class="flex space-x-3">
+<button class="bg-primary text-white px-4 py-2 rounded-button flex items-center gap-2 whitespace-nowrap">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-video-add-line"></i>
+</div>
+<span>Tham gia lớp học</span>
+</button>
+<button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-button flex items-center gap-2 whitespace-nowrap">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-calendar-check-line"></i>
+</div>
+<span>Lịch học</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Stats -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-gray-500 text-sm font-medium">Khóa học đang học</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/10 text-primary">
+<i class="ri-book-open-line"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-gray-800">6</p>
+<p class="text-sm text-gray-500 mt-1">Học kỳ 2, 2024-2025</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-gray-500 text-sm font-medium">Bài tập đang chờ</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-orange-100 text-orange-500">
+<i class="ri-file-list-3-line"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-gray-800">4</p>
+<p class="text-sm text-gray-500 mt-1">Cần hoàn thành trong tuần</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-gray-500 text-sm font-medium">Thông báo mới</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-500">
+<i class="ri-notification-3-line"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-gray-800">3</p>
+<p class="text-sm text-gray-500 mt-1">Chưa đọc</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-gray-500 text-sm font-medium">GPA hiện tại</h3>
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-500">
+<i class="ri-bar-chart-line"></i>
+</div>
+</div>
+<p class="text-3xl font-bold text-gray-800">3.65</p>
+<p class="text-sm text-gray-500 mt-1">Thang điểm 4.0</p>
+</div>
+</div>
+<!-- Main Content Columns -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column - Courses -->
+<div class="lg:col-span-2">
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6">
+<div class="p-6 border-b border-gray-100">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-semibold text-gray-800">Khóa học của tôi</h2>
+<a href="#" class="text-sm text-primary hover:underline">Xem tất cả</a>
+</div>
+</div>
+<div class="divide-y divide-gray-100">
+<!-- Course Item 1 -->
+<div class="p-6 hover:bg-gray-50">
+<div class="flex items-start">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 mr-4 flex-shrink-0">
+<i class="ri-code-s-slash-line text-xl"></i>
+</div>
+<div class="flex-1">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+<h3 class="text-base font-medium text-gray-800">Lập trình hướng đối tượng</h3>
+<span class="text-xs text-gray-500 mt-1 md:mt-0">CS201 - Phòng A305</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center text-sm text-gray-500 mb-3">
+<span class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-user-line"></i>
+</div>
+TS. Trần Minh Tuấn
+</span>
+<span class="md:ml-4 flex items-center mt-1 md:mt-0">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-time-line"></i>
+</div>
+Thứ 2, 7:30 - 10:30
+</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between">
+<div class="flex-1 max-w-md">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs text-gray-500">Tiến độ: 75%</span>
+<span class="text-xs font-medium text-gray-700">15/20 buổi</span>
+</div>
+<progress class="course-progress w-full h-2" value="75" max="100"></progress>
+</div>
+<a href="#" class="mt-3 md:mt-0 md:ml-4 px-4 py-1.5 bg-primary text-white text-sm rounded-button whitespace-nowrap">Vào học</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Course Item 2 -->
+<div class="p-6 hover:bg-gray-50">
+<div class="flex items-start">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-purple-100 text-purple-600 mr-4 flex-shrink-0">
+<i class="ri-database-2-line text-xl"></i>
+</div>
+<div class="flex-1">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+<h3 class="text-base font-medium text-gray-800">Cơ sở dữ liệu</h3>
+<span class="text-xs text-gray-500 mt-1 md:mt-0">IT305 - Phòng B204</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center text-sm text-gray-500 mb-3">
+<span class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-user-line"></i>
+</div>
+PGS.TS. Lê Thị Hương
+</span>
+<span class="md:ml-4 flex items-center mt-1 md:mt-0">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-time-line"></i>
+</div>
+Thứ 4, 13:00 - 16:00
+</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between">
+<div class="flex-1 max-w-md">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs text-gray-500">Tiến độ: 60%</span>
+<span class="text-xs font-medium text-gray-700">12/20 buổi</span>
+</div>
+<progress class="course-progress w-full h-2" value="60" max="100"></progress>
+</div>
+<a href="#" class="mt-3 md:mt-0 md:ml-4 px-4 py-1.5 bg-primary text-white text-sm rounded-button whitespace-nowrap">Vào học</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Course Item 3 -->
+<div class="p-6 hover:bg-gray-50">
+<div class="flex items-start">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-green-100 text-green-600 mr-4 flex-shrink-0">
+<i class="ri-global-line text-xl"></i>
+</div>
+<div class="flex-1">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+<h3 class="text-base font-medium text-gray-800">Mạng máy tính</h3>
+<span class="text-xs text-gray-500 mt-1 md:mt-0">NET202 - Phòng C103</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center text-sm text-gray-500 mb-3">
+<span class="flex items-center">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-user-line"></i>
+</div>
+ThS. Phạm Văn Đức
+</span>
+<span class="md:ml-4 flex items-center mt-1 md:mt-0">
+<div class="w-4 h-4 flex items-center justify-center mr-1">
+<i class="ri-time-line"></i>
+</div>
+Thứ 6, 9:30 - 12:30
+</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between">
+<div class="flex-1 max-w-md">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs text-gray-500">Tiến độ: 80%</span>
+<span class="text-xs font-medium text-gray-700">16/20 buổi</span>
+</div>
+<progress class="course-progress w-full h-2" value="80" max="100"></progress>
+</div>
+<a href="#" class="mt-3 md:mt-0 md:ml-4 px-4 py-1.5 bg-primary text-white text-sm rounded-button whitespace-nowrap">Vào học</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Assignments -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+<div class="p-6 border-b border-gray-100">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-semibold text-gray-800">Bài tập sắp đến hạn</h2>
+<a href="#" class="text-sm text-primary hover:underline">Xem tất cả</a>
+</div>
+</div>
+<div class="divide-y divide-gray-100">
+<!-- Assignment 1 -->
+<div class="p-6 hover:bg-gray-50">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-base font-medium text-gray-800">Bài tập lớn: Thiết kế CSDL</h3>
+<span class="px-2.5 py-1 bg-red-100 text-red-700 text-xs rounded-full">Còn 2 ngày</span>
+</div>
+<p class="text-sm text-gray-600 mb-3">Thiết kế và triển khai cơ sở dữ liệu cho hệ thống quản lý thư viện</p>
+<div class="flex items-center justify-between">
+<span class="text-xs text-gray-500">Môn: Cơ sở dữ liệu</span>
+<a href="#" class="text-sm text-primary hover:underline">Nộp bài</a>
+</div>
+</div>
+<!-- Assignment 2 -->
+<div class="p-6 hover:bg-gray-50">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-base font-medium text-gray-800">Bài tập: Thiết kế lớp và đối tượng</h3>
+<span class="px-2.5 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">Còn 5 ngày</span>
+</div>
+<p class="text-sm text-gray-600 mb-3">Xây dựng các lớp và đối tượng cho hệ thống quản lý sinh viên</p>
+<div class="flex items-center justify-between">
+<span class="text-xs text-gray-500">Môn: Lập trình hướng đối tượng</span>
+<a href="#" class="text-sm text-primary hover:underline">Nộp bài</a>
+</div>
+</div>
+<!-- Assignment 3 -->
+<div class="p-6 hover:bg-gray-50">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-base font-medium text-gray-800">Bài tập: Cấu hình mạng LAN</h3>
+<span class="px-2.5 py-1 bg-green-100 text-green-700 text-xs rounded-full">Còn 7 ngày</span>
+</div>
+<p class="text-sm text-gray-600 mb-3">Thiết kế và cấu hình mạng LAN cho một doanh nghiệp vừa và nhỏ</p>
+<div class="flex items-center justify-between">
+<span class="text-xs text-gray-500">Môn: Mạng máy tính</span>
+<a href="#" class="text-sm text-primary hover:underline">Nộp bài</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column - Sidebar Widgets -->
+<div>
+<!-- Calendar Widget -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6">
+<div class="p-6 border-b border-gray-100">
+<h2 class="text-lg font-semibold text-gray-800">Lịch học hôm nay</h2>
+</div>
+<div class="p-6">
+<div class="text-center mb-4">
+<h3 class="text-xl font-medium text-gray-800">Chủ nhật, 25/05/2025</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center p-3 bg-gray-50 rounded-lg">
+<div class="w-2 h-10 bg-green-500 rounded-full mr-4"></div>
+<div>
+<p class="text-sm font-medium text-gray-800">Không có lịch học</p>
+<p class="text-xs text-gray-500">Hôm nay là ngày nghỉ</p>
+</div>
+</div>
+<div class="text-center">
+<p class="text-sm text-gray-500">Lịch học ngày mai:</p>
+</div>
+<div class="flex items-center p-3 bg-blue-50 rounded-lg">
+<div class="w-2 h-10 bg-blue-500 rounded-full mr-4"></div>
+<div class="flex-1">
+<p class="text-sm font-medium text-gray-800">Lập trình hướng đối tượng</p>
+<p class="text-xs text-gray-500">7:30 - 10:30 • Phòng A305</p>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+<i class="ri-arrow-right-s-line"></i>
+</div>
+</div>
+</div>
+<div class="mt-4 text-center">
+<a href="#" class="text-sm text-primary hover:underline">Xem lịch cả tuần</a>
+</div>
+</div>
+</div>
+<!-- Notifications Widget -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6">
+<div class="p-6 border-b border-gray-100">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-semibold text-gray-800">Thông báo mới</h2>
+<a href="#" class="text-sm text-primary hover:underline">Xem tất cả</a>
+</div>
+</div>
+<div class="divide-y divide-gray-100">
+<div class="p-4 hover:bg-gray-50">
+<div class="flex">
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-500 mr-3 flex-shrink-0">
+<i class="ri-notification-3-line"></i>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-800">Thay đổi lịch thi giữa kỳ</p>
+<p class="text-xs text-gray-500 mt-1">Môn Cơ sở dữ liệu sẽ thay đổi lịch thi từ 01/06 sang 03/06</p>
+<p class="text-xs text-gray-400 mt-2">15 phút trước</p>
+</div>
+</div>
+</div>
+<div class="p-4 hover:bg-gray-50">
+<div class="flex">
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-500 mr-3 flex-shrink-0">
+<i class="ri-file-list-3-line"></i>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-800">Đã đăng tài liệu mới</p>
+<p class="text-xs text-gray-500 mt-1">Giảng viên đã đăng tài liệu mới cho môn Mạng máy tính</p>
+<p class="text-xs text-gray-400 mt-2">2 giờ trước</p>
+</div>
+</div>
+</div>
+<div class="p-4 hover:bg-gray-50">
+<div class="flex">
+<div class="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 text-green-500 mr-3 flex-shrink-0">
+<i class="ri-discuss-line"></i>
+</div>
+<div>
+<p class="text-sm font-medium text-gray-800">Phản hồi mới trong diễn đàn</p>
+<p class="text-xs text-gray-500 mt-1">Trần Minh Tuấn đã trả lời câu hỏi của bạn</p>
+<p class="text-xs text-gray-400 mt-2">Hôm qua</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Assistant Widget -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+<div class="p-6 border-b border-gray-100">
+<h2 class="text-lg font-semibold text-gray-800">Trợ lý AI</h2>
+</div>
+<div class="p-6">
+<div class="flex items-center justify-center mb-4">
+<div class="w-16 h-16 flex items-center justify-center rounded-full bg-primary/10 text-primary">
+<i class="ri-robot-line text-2xl"></i>
+</div>
+</div>
+<p class="text-center text-sm text-gray-600 mb-4">Trợ lý AI có thể giúp bạn trả lời câu hỏi, lên lịch học và nhiều hơn nữa.</p>
+<div class="relative">
+<input type="text" class="w-full border border-gray-300 rounded-lg pl-4 pr-10 py-2 text-sm" placeholder="Hỏi trợ lý AI...">
+<button class="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-send-plane-fill"></i>
+</button>
+</div>
+<div class="mt-4">
+<p class="text-xs text-gray-500 mb-2">Gợi ý:</p>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200 whitespace-nowrap">Lịch thi cuối kỳ?</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200 whitespace-nowrap">Giải thích OOP?</button>
+<button class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200 whitespace-nowrap">Tài liệu môn CSDL?</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- Mobile Navigation -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-10">
+<div class="flex items-center justify-around">
+<a href="#" class="flex flex-col items-center py-2 text-primary">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-dashboard-line"></i>
+</div>
+<span class="text-xs mt-1">Trang chủ</span>
+</a>
+<a href="#" class="flex flex-col items-center py-2 text-gray-500">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-book-open-line"></i>
+</div>
+<span class="text-xs mt-1">Khóa học</span>
+</a>
+<a href="#" class="flex flex-col items-center py-2 text-gray-500">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-calendar-line"></i>
+</div>
+<span class="text-xs mt-1">Lịch</span>
+</a>
+<a href="#" class="flex flex-col items-center py-2 text-gray-500">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-file-list-3-line"></i>
+</div>
+<span class="text-xs mt-1">Bài tập</span>
+</a>
+<a href="#" class="flex flex-col items-center py-2 text-gray-500">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-user-line"></i>
+</div>
+<span class="text-xs mt-1">Cá nhân</span>
+</a>
+</div>
+</div>
+<script id="mobileMenuScript">
+document.addEventListener('DOMContentLoaded', function() {
+const menuButton = document.querySelector('.md\\:hidden .ri-menu-line').parentElement;
+const sidebar = document.querySelector('aside');
+menuButton.addEventListener('click', function() {
+sidebar.classList.toggle('hidden');
+sidebar.classList.toggle('fixed');
+sidebar.classList.toggle('z-50');
+sidebar.classList.toggle('top-0');
+sidebar.classList.toggle('left-0');
+sidebar.classList.toggle('h-full');
+});
+});
+</script>
+</body>
+</html>
